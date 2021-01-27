@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App.jsx';
+import '@atlaskit/css-reset'
+import { App } from './App.jsx';
 
 ReactDOM.render(
   <React.StrictMode>

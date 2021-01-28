@@ -1,0 +1,4 @@
+export const SET_COLUMN_ORDER = "SET_COLUMN_ORDER";
+export const SET_NEW_SAME_COLUMN = "SET_NEW_SAME_COLUMN";
+export const SET_NEW_COLUMN = "SET_NEW_COLUMN";
+export const ADD_NEW_COLUMN = "ADD_NEW_COLUMN";

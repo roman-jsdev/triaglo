@@ -1,27 +1,28 @@
 import { useMemo } from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
+import { AddNewTaskBtn } from "./AddNewTaskBtn/AddNewTaskBtn";
+import { ColumnTitle } from "./ColumnTitle";
 import { Task } from "./Task";
 
 const Container = styled.div`
   margin: 8px;
   border: 1px solid #eee;
-  border-radius: 2px;
+  border-radius: var(--main-border-radius);
   width: 300px;
   height: max-content;
   display: flex;
   flex-direction: column;
 `;
-const Title = styled.h3`
-  padding: 8px;
-  background-color: #f7f7f7;
-`;
+
 const TaskList = styled.div`
   padding: 8px;
   transition: background-color 0.15s ease;
-  background-color: ${(props) => (props.isDraggingOver ? "#eee" : "white")};
+  background-color: ${(props) =>
+    props.isDraggingOver
+      ? "var(--column-primary-dragged-background)"
+      : "var(--column-primary-background)"};
   flex-grow: 1;
-  min-height: 100px;
 `;
 
 const InnerList = ({ tasks }) => {
@@ -40,7 +41,7 @@ export const Column = ({ column, tasks, index }) => {
     <Draggable draggableId={column.id} index={index}>
       {(provided) => (
         <Container ref={provided.innerRef} {...provided.draggableProps}>
-          <Title {...provided.dragHandleProps}>{column.title}</Title>
+          <ColumnTitle providedProps={provided.dragHandleProps} column={column} />
           <Droppable droppableId={column.id} type="task">
             {(provided, snapshot) => (
               <TaskList
@@ -53,6 +54,7 @@ export const Column = ({ column, tasks, index }) => {
               </TaskList>
             )}
           </Droppable>
+          <AddNewTaskBtn />
         </Container>
       )}
     </Draggable>

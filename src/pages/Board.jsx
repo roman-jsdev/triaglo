@@ -1,6 +1,7 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
+import { AddNewColumn } from "../components/AddNewColumnBtn/AddNewColumnBtn";
 import { Column } from "../components/Column";
 import { useDndState } from "../store/DndContext/DndContext";
 
@@ -24,10 +25,8 @@ export const Board = () => {
     setColumnOrder,
     setNewSameColumn,
     setNewColumn,
-    addNewColumn,
   } = useDndState();
 
-  const [value, setValue] = useState("");
   document.body.style.backgroundColor = dndState.bg;
 
   const onDragEnd = (result) => {
@@ -87,23 +86,6 @@ export const Board = () => {
     setNewColumn(newStart, newFinish);
   };
 
-  const handleClick = () => {
-    if (!value) return;
-    const columnsCount = Object.keys(dndState.columns).length;
-    const newColumn = {
-      [`column-${columnsCount + 1}`]: {
-        id: `column-${columnsCount + 1}`,
-        title: value,
-        taskIds: [],
-      },
-    };
-    const newOrder = [...dndState.columnOrder];
-    newOrder.push(`column-${columnsCount + 1}`);
-
-    addNewColumn(newColumn, newOrder);
-    setValue("");
-  };
-
   return (
     <>
       <DragDropContext onDragEnd={onDragEnd}>
@@ -126,14 +108,7 @@ export const Board = () => {
                 );
               })}
               {provided.placeholder}
-              <div>
-                <input
-                  type="text"
-                  value={value}
-                  onChange={(e) => setValue(e.target.value)}
-                />
-                <button onClick={handleClick}>Add new</button>
-              </div>
+              <AddNewColumn />
             </Container>
           )}
         </Droppable>

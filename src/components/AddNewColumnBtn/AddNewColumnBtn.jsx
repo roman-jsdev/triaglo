@@ -64,6 +64,7 @@ export const AddNewColumn = () => {
           buttonsRef.current.lastElementChild.firstElementChild,
         ];
         if (nodes.indexOf(e.target) === -1) closeButtonsWrapper();
+        setValue("");
       }
     },
     [closeButtonsWrapper]

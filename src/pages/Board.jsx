@@ -7,7 +7,9 @@ import { useDndState } from "../store/DndContext/DndContext";
 
 const Container = styled.div`
   display: flex;
-  width: max-content;
+  width: 100%;
+  overflow-x: auto;
+  height: 90vh;
 `;
 
 const InnerList = ({ column, taskMap, index }) => {
@@ -44,11 +46,7 @@ export const Board = () => {
     }
 
     if (type === "column") {
-      const newColumnOrder = Array.from(dndState.columnOrder);
-      newColumnOrder.splice(source.index, 1);
-      newColumnOrder.splice(destination.index, 0, draggableId);
-
-      setColumnOrder(newColumnOrder);
+      setColumnOrder(source, destination, draggableId);
       return;
     }
 
@@ -56,34 +54,11 @@ export const Board = () => {
     const finish = dndState.columns[destination.droppableId];
 
     if (start === finish) {
-      const newTaskIds = Array.from(start.taskIds);
-      newTaskIds.splice(source.index, 1);
-      newTaskIds.splice(destination.index, 0, draggableId);
-
-      const newColumn = {
-        ...start,
-        taskIds: newTaskIds,
-      };
-
-      setNewSameColumn(newColumn);
+      setNewSameColumn(start, source, destination, draggableId);
       return;
     }
 
-    const startTaskIds = Array.from(start.taskIds);
-    startTaskIds.splice(source.index, 1);
-    const newStart = {
-      ...start,
-      taskIds: startTaskIds,
-    };
-
-    const finishTaskIds = Array.from(finish.taskIds);
-    finishTaskIds.splice(destination.index, 0, draggableId);
-    const newFinish = {
-      ...finish,
-      taskIds: finishTaskIds,
-    };
-
-    setNewColumn(newStart, newFinish);
+    setNewColumn(start, finish, source, destination, draggableId);
   };
 
   return (

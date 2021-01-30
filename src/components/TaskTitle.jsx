@@ -14,6 +14,10 @@ const Input = styled.textarea(
     height: 22px;
     width: 215px;
     font-family: inherit;
+    &:focus {
+      cursor: text;
+      background-color: var(--task-background);
+    }
   `
 );
 const Wrapper = styled.div`
@@ -59,7 +63,7 @@ export const TaskTitle = ({ task, isDragging }) => {
   }, []);
 
   useEffect(() => {
-    titleRef.current.style.height = titleRef.current.scrollHeight - 4 + "px";
+    titleRef.current.style.height = titleRef.current.scrollHeight - 1 + "px";
     wrapperRef.current.style.height = titleRef.current.scrollHeight + "px";
     titleRef.current.style.pointerEvents = "none";
     document.body.addEventListener("click", handleClick);

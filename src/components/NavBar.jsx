@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import styled from "styled-components";
 
 const Nav = styled.nav`
@@ -8,7 +8,8 @@ const Nav = styled.nav`
   background-color: #8080dd;
   color: white;
   padding: 10px;
-  margin-bottom: 24px;
+  height: 5vh;
+  margin-bottom: 5vh;
 `;
 
 const Brand = styled.div`
@@ -32,23 +33,19 @@ const NavLinkSingle = styled.li`
 `;
 
 export const NavBar = () => {
+  const location = useLocation();
+  const isHome = location.pathname === "/" ? true : false;
+
   return (
     <Nav>
       <Brand>Tasks APP</Brand>
       <NavLinks>
         <NavLinkSingle>
-          <NavLink to="/" exact className="nav-link" activeClassName="active">
-            Home
-          </NavLink>
-        </NavLinkSingle>
-        <NavLinkSingle>
-          <NavLink
-            to={`/board/${Math.floor(Math.random() * 100000)}`}
-            className="nav-link"
-            activeClassName="active"
-          >
-            Board
-          </NavLink>
+          {!isHome && (
+            <NavLink to="/" exact className="nav-link" activeClassName="active">
+              Home
+            </NavLink>
+          )}
         </NavLinkSingle>
       </NavLinks>
     </Nav>

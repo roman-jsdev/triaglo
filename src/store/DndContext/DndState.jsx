@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import { DndContext } from "./DndContext";
 import {
   SET_COLUMN_ORDER,
@@ -12,16 +12,35 @@ import {
   SET_TASK_TITLE,
 } from "../types";
 import { dndReducer } from "./dndReducer";
-import { initialData } from "../../initialData";
+import { useInitialBoardState } from "../../hooks/useInitialBoardState";
+import { useBoardId } from "../../hooks/useBoardId";
 
 export const DndState = ({ children }) => {
-  const [dndState, dispatch] = useReducer(dndReducer, initialData);
+  const [initialState] = useInitialBoardState();
+  const [dndState, dispatch] = useReducer(dndReducer, initialState);
+  const [boardId] = useBoardId();
 
-  const setColumnOrder = (newOrder) => {
-    dispatch({ type: SET_COLUMN_ORDER, payload: newOrder });
+  useEffect(() => {
+    localStorage.setItem(boardId, JSON.stringify(dndState));
+  }, [boardId, dndState]);
+
+  const setColumnOrder = (source, destination, draggableId) => {
+    const newColumnOrder = Array.from(dndState.columnOrder);
+    newColumnOrder.splice(source.index, 1);
+    newColumnOrder.splice(destination.index, 0, draggableId);
+    dispatch({ type: SET_COLUMN_ORDER, payload: newColumnOrder });
   };
 
-  const setNewSameColumn = (newColumn) => {
+  const setNewSameColumn = (start, source, destination, draggableId) => {
+    const newTaskIds = Array.from(start.taskIds);
+    newTaskIds.splice(source.index, 1);
+    newTaskIds.splice(destination.index, 0, draggableId);
+
+    const newColumn = {
+      ...start,
+      taskIds: newTaskIds,
+    };
+
     const payload = {
       ...dndState.columns,
       [newColumn.id]: newColumn,
@@ -29,7 +48,20 @@ export const DndState = ({ children }) => {
     dispatch({ type: SET_NEW_SAME_COLUMN, payload: payload });
   };
 
-  const setNewColumn = (newStart, newFinish) => {
+  const setNewColumn = (start, finish, source, destination, draggableId) => {
+    const startTaskIds = Array.from(start.taskIds);
+    startTaskIds.splice(source.index, 1);
+    const newStart = {
+      ...start,
+      taskIds: startTaskIds,
+    };
+
+    const finishTaskIds = Array.from(finish.taskIds);
+    finishTaskIds.splice(destination.index, 0, draggableId);
+    const newFinish = {
+      ...finish,
+      taskIds: finishTaskIds,
+    };
     const payload = {
       ...dndState.columns,
       [newStart.id]: newStart,

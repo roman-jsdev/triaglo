@@ -1,3 +1,10 @@
+import { DashBoard } from "../components/Dashboard/DashBoard";
+
 export const Home = () => {
-  return <h1>Home Page</h1>;
+  document.body.style.backgroundColor = "rgb(128 128 221)";
+  return (
+    <>
+      <DashBoard />
+    </>
+  );
 };

@@ -35,6 +35,7 @@ const NavLinkSingle = styled.li`
 export const NavBar = () => {
   const location = useLocation();
   const isHome = location.pathname === "/" ? true : false;
+  const isLoggedIn = sessionStorage.getItem("token");
 
   return (
     <Nav>
@@ -44,6 +45,17 @@ export const NavBar = () => {
           {!isHome && (
             <NavLink to="/" exact className="nav-link" activeClassName="active">
               Home
+            </NavLink>
+          )}
+        </NavLinkSingle>
+        <NavLinkSingle>
+          {isLoggedIn ? (
+            <NavLink to="/logout" className="nav-link" activeClassName="active">
+              Logout
+            </NavLink>
+          ) : (
+            <NavLink to="/auth" className="nav-link" activeClassName="active">
+              Auth
             </NavLink>
           )}
         </NavLinkSingle>

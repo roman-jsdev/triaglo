@@ -9,6 +9,7 @@ export const Wrapper = styled.div`
   background-color: hsla(0, 0%, 100%, 0.24);
   border-radius: var(--main-border-radius);
   width: 300px;
+  min-width: 300px;
   height: max-content;
   display: flex;
   flex-direction: column;

@@ -26,6 +26,7 @@ const Input = styled.textarea`
   height: 25px;
   &:focus {
     cursor: text;
+    background-color: var(--task-background);
   }
 `;
 

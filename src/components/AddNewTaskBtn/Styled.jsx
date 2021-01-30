@@ -6,7 +6,7 @@ export const ButtonsWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 8px;
-  height: 32px;
+  height: 48px;
   border-top: 1px solid var(--column-border-color);
 `;
 export const Input = styled.input`

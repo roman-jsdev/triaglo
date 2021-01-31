@@ -1,4 +1,6 @@
 export const initialData = {
+  owner: '',
+  invited: [],
   tasks: {},
   columns: {},
   columnOrder: [],

@@ -2,7 +2,9 @@ import { useMemo } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import { AddNewColumn } from "../components/AddNewColumnBtn/AddNewColumnBtn";
+import { BoardHeader } from "../components/BoardHeader/BoardHeader";
 import { Column } from "../components/Column";
+import { useAuthState } from "../store/AuthContext/AuthContext";
 import { useDndState } from "../store/DndContext/DndContext";
 
 const Container = styled.div`
@@ -29,7 +31,18 @@ export const Board = () => {
     setNewColumn,
   } = useDndState();
 
-  document.body.style.backgroundColor = dndState.bg;
+  const { authState } = useAuthState();
+
+  const isLoggedIn = sessionStorage.getItem('token')
+
+  const invitedList = dndState.invited;
+
+  const ownerId = dndState.owner;
+  const userId = authState.id;
+  const userEmail = authState.email;
+
+  const isOwner = ownerId === userId;
+  const isInvited = invitedList.includes(userEmail);
 
   const onDragEnd = (result) => {
     const { destination, source, draggableId, type } = result;
@@ -61,33 +74,42 @@ export const Board = () => {
     setNewColumn(start, finish, source, destination, draggableId);
   };
 
+  document.body.style.backgroundColor = dndState.bg;
+
   return (
     <>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable
-          droppableId="all-columns"
-          direction="horizontal"
-          type="column"
-        >
-          {(provided) => (
-            <Container ref={provided.innerRef} {...provided.droppableProps}>
-              {dndState.columnOrder.map((columnId, index) => {
-                const column = dndState.columns[columnId];
-                return (
-                  <InnerList
-                    key={column.id}
-                    column={column}
-                    taskMap={dndState.tasks}
-                    index={index}
-                  />
-                );
-              })}
-              {provided.placeholder}
-              <AddNewColumn />
-            </Container>
-          )}
-        </Droppable>
-      </DragDropContext>
+      {(isLoggedIn && isOwner) || (isLoggedIn && isInvited) ? (
+        <>
+          <BoardHeader />
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable
+              droppableId="all-columns"
+              direction="horizontal"
+              type="column"
+            >
+              {(provided) => (
+                <Container ref={provided.innerRef} {...provided.droppableProps}>
+                  {dndState.columnOrder.map((columnId, index) => {
+                    const column = dndState.columns[columnId];
+                    return (
+                      <InnerList
+                        key={column.id}
+                        column={column}
+                        taskMap={dndState.tasks}
+                        index={index}
+                      />
+                    );
+                  })}
+                  {provided.placeholder}
+                  <AddNewColumn />
+                </Container>
+              )}
+            </Droppable>
+          </DragDropContext>
+        </>
+      ) : (
+        <h1 style={{color: 'white', textAlign: 'center' }}>No Access To This Board</h1>
+      )}
     </>
   );
 };

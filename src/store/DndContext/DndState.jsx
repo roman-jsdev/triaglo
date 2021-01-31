@@ -10,19 +10,36 @@ import {
   REMOVE_TASK,
   SET_COLUMN_TITLE,
   SET_TASK_TITLE,
+  ADD_USER_TO_BOARD,
 } from "../types";
 import { dndReducer } from "./dndReducer";
 import { useInitialBoardState } from "../../hooks/useInitialBoardState";
 import { useBoardId } from "../../hooks/useBoardId";
+import { useAuthState } from "../AuthContext/AuthContext";
+import { useDB } from "../../hooks/useDB";
 
 export const DndState = ({ children }) => {
   const [initialState] = useInitialBoardState();
-  const [dndState, dispatch] = useReducer(dndReducer, initialState);
+  const { authState } = useAuthState();
+
+  let initialStateWithAuth = initialState;
+
+  if (!initialState.owner) {
+    initialStateWithAuth = {
+      ...initialState,
+      owner: authState.id,
+    };
+  }
+
+  const [dndState, dispatch] = useReducer(dndReducer, initialStateWithAuth);
+
   const [boardId] = useBoardId();
 
+  const [fetchDb] = useDB("put", `boards/${boardId}`, JSON.stringify(dndState));
+
   useEffect(() => {
-    localStorage.setItem(boardId, JSON.stringify(dndState));
-  }, [boardId, dndState]);
+    fetchDb();
+  }, [fetchDb]);
 
   const setColumnOrder = (source, destination, draggableId) => {
     const newColumnOrder = Array.from(dndState.columnOrder);
@@ -45,7 +62,7 @@ export const DndState = ({ children }) => {
       ...dndState.columns,
       [newColumn.id]: newColumn,
     };
-    dispatch({ type: SET_NEW_SAME_COLUMN, payload: payload });
+    dispatch({ type: SET_NEW_SAME_COLUMN, payload });
   };
 
   const setNewColumn = (start, finish, source, destination, draggableId) => {
@@ -67,7 +84,7 @@ export const DndState = ({ children }) => {
       [newStart.id]: newStart,
       [newFinish.id]: newFinish,
     };
-    dispatch({ type: SET_NEW_COLUMN, payload: payload });
+    dispatch({ type: SET_NEW_COLUMN, payload });
   };
 
   const addNewColumn = (value) => {
@@ -88,7 +105,7 @@ export const DndState = ({ children }) => {
       },
       order: newOrder,
     };
-    dispatch({ type: ADD_NEW_COLUMN, payload: payload });
+    dispatch({ type: ADD_NEW_COLUMN, payload });
   };
 
   const removeColumn = (id) => {
@@ -123,7 +140,7 @@ export const DndState = ({ children }) => {
       columns: filteredColumns,
       order: filteredOrder,
     };
-    dispatch({ type: REMOVE_COLUMN, payload: payload });
+    dispatch({ type: REMOVE_COLUMN, payload });
   };
 
   const addNewTask = (columnId, value) => {
@@ -147,7 +164,7 @@ export const DndState = ({ children }) => {
       columns: currentColumns,
     };
 
-    dispatch({ type: ADD_NEW_TASK, payload: payload });
+    dispatch({ type: ADD_NEW_TASK, payload });
   };
 
   const removeTask = (taskId, columnId) => {
@@ -173,7 +190,7 @@ export const DndState = ({ children }) => {
       columns: currentColumns,
     };
 
-    dispatch({ type: REMOVE_TASK, payload: payload });
+    dispatch({ type: REMOVE_TASK, payload });
   };
 
   const setColumnTitle = (columnId, value) => {
@@ -181,7 +198,7 @@ export const DndState = ({ children }) => {
     currentColumns[columnId].title = value;
     const payload = currentColumns;
 
-    dispatch({ type: SET_COLUMN_TITLE, payload: payload });
+    dispatch({ type: SET_COLUMN_TITLE, payload });
   };
 
   const setTaskTitle = (taskId, value) => {
@@ -189,7 +206,19 @@ export const DndState = ({ children }) => {
     currentTasks[taskId].content = value;
     const payload = currentTasks;
 
-    dispatch({ type: SET_TASK_TITLE, payload: payload });
+    dispatch({ type: SET_TASK_TITLE, payload });
+  };
+
+  const addUserToBoard = (email) => {
+    const currentInvited = [...dndState.invited];
+    const invited = [...currentInvited, email];
+    dispatch({ type: ADD_USER_TO_BOARD, payload: invited });
+  };
+
+  const removeUserFromBoard = (email) => {
+    const currentInvited = [...dndState.invited];
+    const invited = currentInvited.filter((e) => e !== email);
+    dispatch({ type: ADD_USER_TO_BOARD, payload: invited });
   };
 
   return (
@@ -205,6 +234,8 @@ export const DndState = ({ children }) => {
         removeTask,
         setColumnTitle,
         setTaskTitle,
+        addUserToBoard,
+        removeUserFromBoard,
       }}
     >
       {children}

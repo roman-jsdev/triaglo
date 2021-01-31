@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useUserState } from "../../store/UserContext/UserContext";
 import { BoardLink } from "./BoardLink";
 
 const Wrapper = styled.div`
@@ -22,14 +23,22 @@ const SideBar = styled.div`
 `;
 
 export const DashBoard = () => {
-  const items = { ...localStorage };
+  const { userState, addBoardToUser } = useUserState();
+
+  const id = `board/${Date.now()}`;
+  const boards = userState.boards;
   const links = [
-    ...Object.keys(items).map((e) => {
+    ...boards.map((e) => {
       const splitStr = e.split(/(\d+)/);
-      return { to: `/${splitStr[0]}/${splitStr[1]}`, title: e };
+      return { to: `/${splitStr[0]}${splitStr[1]}`, title: e };
     }),
     { to: "/", type: "new", title: "+ Add New Board" },
   ];
+
+  const handleClick = (type) => {
+    if (type !== "new") return;
+    addBoardToUser(id);
+  };
 
   return (
     <Wrapper>
@@ -38,7 +47,14 @@ export const DashBoard = () => {
       </SideBar>
       <BoardsWrapper>
         {links.map((e, i) => (
-          <BoardLink key={i} to={e.to} title={e.title} type={e.type} />
+          <BoardLink
+            key={i}
+            to={e.to}
+            title={e.title}
+            type={e.type}
+            id={id}
+            onClick={() => handleClick(e.type)}
+          />
         ))}
       </BoardsWrapper>
     </Wrapper>

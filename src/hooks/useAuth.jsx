@@ -23,9 +23,10 @@ export const useAuth = (authData, type) => {
 
       sessionStorage.setItem("token", data.idToken);
       sessionStorage.setItem("userId", data.localId);
+      sessionStorage.setItem("email", data.email);
       sessionStorage.setItem("expirationDate", expirationDate);
 
-      login(data.idToken);
+      login(data.idToken, data.localId, data.email);
       history.push("/");
     } catch (e) {
       alert("Incorrect Login Data");

@@ -8,6 +8,8 @@ import {
   REMOVE_TASK,
   SET_COLUMN_TITLE,
   SET_TASK_TITLE,
+  ADD_USER_TO_BOARD,
+  REMOVE_USER_FROM_BOARD,
 } from "../types";
 
 const handlers = {
@@ -51,6 +53,14 @@ const handlers = {
   [SET_TASK_TITLE]: (state, { payload }) => ({
     ...state,
     tasks: payload,
+  }),
+  [ADD_USER_TO_BOARD]: (state, { payload }) => ({
+    ...state,
+    invited: payload,
+  }),
+  [REMOVE_USER_FROM_BOARD]: (state, { payload }) => ({
+    ...state,
+    invited: payload,
   }),
   DEFAULT: (state) => state,
 };

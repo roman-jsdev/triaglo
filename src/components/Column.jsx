@@ -17,7 +17,7 @@ const Container = styled.div`
 `;
 
 const TaskList = styled.div`
-  padding: 8px;
+  padding: ${({ isEmpty }) => (!isEmpty ? 0 : "8px")};
   transition: background-color 0.15s ease;
   background-color: ${(props) =>
     props.isDraggingOver
@@ -44,13 +44,17 @@ export const Column = ({ column, tasks, index }) => {
     <Draggable draggableId={column.id} index={index}>
       {(provided) => (
         <Container ref={provided.innerRef} {...provided.draggableProps}>
-          <ColumnTitle providedProps={provided.dragHandleProps} column={column} />
+          <ColumnTitle
+            providedProps={provided.dragHandleProps}
+            column={column}
+          />
           <Droppable droppableId={column.id} type="task">
             {(provided, snapshot) => (
               <TaskList
                 ref={provided.innerRef}
                 {...provided.droppableProps}
                 isDraggingOver={snapshot.isDraggingOver}
+                isEmpty={!!tasks.length}
               >
                 <InnerList tasks={tasks} />
                 {provided.placeholder}

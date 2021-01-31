@@ -1,5 +1,6 @@
 import { NavLink, useLocation } from "react-router-dom";
 import styled from "styled-components";
+import { useAuthState } from "../store/AuthContext/AuthContext";
 
 const Nav = styled.nav`
   display: flex;
@@ -9,7 +10,6 @@ const Nav = styled.nav`
   color: white;
   padding: 10px;
   height: 5vh;
-  margin-bottom: 5vh;
 `;
 
 const Brand = styled.div`
@@ -33,9 +33,10 @@ const NavLinkSingle = styled.li`
 `;
 
 export const NavBar = () => {
+  const { authState } = useAuthState();
   const location = useLocation();
   const isHome = location.pathname === "/" ? true : false;
-  const isLoggedIn = sessionStorage.getItem("token");
+  const isLoggedIn = authState.token;
 
   return (
     <Nav>

@@ -1,6 +1,6 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { useUserState } from "../../store/UserContext/UserContext";
 
 const Wrapper = styled.div`
   display: flex;
@@ -49,28 +49,26 @@ const DeleteBtn = styled.div`
   }
 `;
 
-export const BoardLink = ({ to, type, title }) => {
-  const [show, setShow] = useState(true);
+export const BoardLink = ({ to, type, title, id, onClick }) => {
+  const { removeBoardFromUser } = useUserState();
 
   const handleDelete = () => {
+    removeBoardFromUser(title);
     localStorage.removeItem(title);
-    setShow(false);
   };
 
   return (
     <>
-      {show ? (
-        <Wrapper>
-          <Link to={type === "new" ? `/board/${Date.now()}` : to}>
-            <span>{title}</span>
-          </Link>
-          {type === "new" ? null : (
-            <DeleteBtn onClick={handleDelete}>
-              <i className="fas fa-trash-alt"></i>
-            </DeleteBtn>
-          )}
-        </Wrapper>
-      ) : null}
+      <Wrapper onClick={onClick}>
+        <Link to={type === "new" ? `/${id}` : to}>
+          <span>{title}</span>
+        </Link>
+        {type === "new" ? null : (
+          <DeleteBtn onClick={handleDelete}>
+            <i className="fas fa-trash-alt"></i>
+          </DeleteBtn>
+        )}
+      </Wrapper>
     </>
   );
 };

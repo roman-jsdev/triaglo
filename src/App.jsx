@@ -9,9 +9,10 @@ import { useAuthState } from "./store/AuthContext/AuthContext";
 import { DndState } from "./store/DndContext/DndState";
 
 export const App = () => {
+  const { authState } = useAuthState();
   const { autoLogin } = useAuthState();
 
-  const isLoggedIn = sessionStorage.getItem("token");
+  const isLoggedIn = authState.token;
 
   useEffect(() => {
     autoLogin();

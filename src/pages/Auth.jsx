@@ -14,7 +14,7 @@ export const Auth = () => {
 
   const type = isLogin ? "login" : "register";
 
-  const [auth] = useAuth(authData, type);
+  const [auth, isLoading] = useAuth(authData, type);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -32,6 +32,7 @@ export const Auth = () => {
       setEmail={setEmail}
       password={password}
       setPassword={setPassword}
+      isLoading={isLoading}
     />
   );
 };

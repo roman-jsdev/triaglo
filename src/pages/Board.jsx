@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import { AddNewColumn } from "../components/AddNewColumnBtn/AddNewColumnBtn";
@@ -29,20 +29,26 @@ export const Board = () => {
     setColumnOrder,
     setNewSameColumn,
     setNewColumn,
+    fetchInitialState
   } = useDndState();
 
   const { authState } = useAuthState();
 
-  const isLoggedIn = sessionStorage.getItem('token')
+  const isLoggedIn = sessionStorage.getItem("token");
 
-  const invitedList = dndState.invited;
+  const getAccess = (type) => {
+    document.body.style.backgroundColor = dndState.bg;
 
-  const ownerId = dndState.owner;
-  const userId = authState.id;
-  const userEmail = authState.email;
+    const invitedList = dndState.invited;
 
-  const isOwner = ownerId === userId;
-  const isInvited = invitedList.includes(userEmail);
+    const ownerId = dndState.owner;
+    const userId = authState.id;
+    const userEmail = authState.email;
+
+    return type === "owner"
+      ? (ownerId === userId) && isLoggedIn
+      : invitedList.includes(userEmail)  && isLoggedIn
+  };
 
   const onDragEnd = (result) => {
     const { destination, source, draggableId, type } = result;
@@ -74,41 +80,56 @@ export const Board = () => {
     setNewColumn(start, finish, source, destination, draggableId);
   };
 
-  document.body.style.backgroundColor = dndState.bg;
+  useEffect(() => {
+    if(dndState.isLoading) {
+      fetchInitialState()
+    }  
+  },[fetchInitialState, dndState.isLoading])
 
   return (
     <>
-      {(isLoggedIn && isOwner) || (isLoggedIn && isInvited) ? (
-        <>
-          <BoardHeader />
-          <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable
-              droppableId="all-columns"
-              direction="horizontal"
-              type="column"
-            >
-              {(provided) => (
-                <Container ref={provided.innerRef} {...provided.droppableProps}>
-                  {dndState.columnOrder.map((columnId, index) => {
-                    const column = dndState.columns[columnId];
-                    return (
-                      <InnerList
-                        key={column.id}
-                        column={column}
-                        taskMap={dndState.tasks}
-                        index={index}
-                      />
-                    );
-                  })}
-                  {provided.placeholder}
-                  <AddNewColumn />
-                </Container>
-              )}
-            </Droppable>
-          </DragDropContext>
-        </>
+      {dndState.isLoading ? (
+        <p>Loading...</p>
       ) : (
-        <h1 style={{color: 'white', textAlign: 'center' }}>No Access To This Board</h1>
+        <>
+          {getAccess('owner') || getAccess('invited') ? (
+            <>
+              <BoardHeader />
+              <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable
+                  droppableId="all-columns"
+                  direction="horizontal"
+                  type="column"
+                >
+                  {(provided) => (
+                    <Container
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                    >
+                      {dndState.columnOrder.map((columnId, index) => {
+                        const column = dndState.columns[columnId];
+                        return (
+                          <InnerList
+                            key={column.id}
+                            column={column}
+                            taskMap={dndState.tasks}
+                            index={index}
+                          />
+                        );
+                      })}
+                      {provided.placeholder}
+                      <AddNewColumn />
+                    </Container>
+                  )}
+                </Droppable>
+              </DragDropContext>
+            </>
+          ) : (
+            <h1 style={{ color: "white", textAlign: "center" }}>
+              No Access To This Board
+            </h1>
+          )}
+        </>
       )}
     </>
   );

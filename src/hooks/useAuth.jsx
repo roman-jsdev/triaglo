@@ -1,10 +1,12 @@
 import axios from "axios";
+import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useAuthState } from "../store/AuthContext/AuthContext";
 
 export const useAuth = (authData, type) => {
   const { login } = useAuthState();
   const history = useHistory();
+  const [isLoading, setIsLoading] = useState(false);
 
   const url =
     type === "login"
@@ -13,6 +15,7 @@ export const useAuth = (authData, type) => {
 
   const tryLogin = async () => {
     try {
+      setIsLoading(true);
       const response = await axios.post(url, authData);
 
       const data = response.data;
@@ -34,5 +37,9 @@ export const useAuth = (authData, type) => {
     }
   };
 
-  return [tryLogin];
+  useEffect(() => {
+    return setIsLoading(false);
+  }, []);
+
+  return [tryLogin, isLoading];
 };

@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { useBoardId } from "../../hooks/useBoardId";
+import { useDB } from "../../hooks/useDB";
 import { useUserState } from "../../store/UserContext/UserContext";
 
 const Wrapper = styled.div`
@@ -51,24 +53,37 @@ const DeleteBtn = styled.div`
 
 export const BoardLink = ({ to, type, title, id, onClick }) => {
   const { removeBoardFromUser } = useUserState();
+  const [boardId] = useBoardId(title);
+  const { userState } = useUserState();
+
+  const currentUserId = userState.userId;
+  const [deleteFromDB, isLoading] = useDB(
+    "delete",
+    `${currentUserId}/boards/${boardId}`
+  );
 
   const handleDelete = () => {
+    deleteFromDB();
     removeBoardFromUser(title);
     localStorage.removeItem(title);
   };
 
   return (
     <>
-      <Wrapper onClick={onClick}>
-        <Link to={type === "new" ? `/${id}` : to}>
-          <span>{title}</span>
-        </Link>
-        {type === "new" ? null : (
-          <DeleteBtn onClick={handleDelete}>
-            <i className="fas fa-trash-alt"></i>
-          </DeleteBtn>
-        )}
-      </Wrapper>
+      {!isLoading ? (
+        null
+      ) : (
+        <Wrapper onClick={onClick}>
+          <Link to={type === "new" ? `/${id}` : to}>
+            <span>{title}</span>
+          </Link>
+          {type === "new" ? null : (
+            <DeleteBtn onClick={handleDelete}>
+              <i className="fas fa-trash-alt"></i>
+            </DeleteBtn>
+          )}
+        </Wrapper>
+      )}
     </>
   );
 };

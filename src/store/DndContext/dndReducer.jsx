@@ -10,6 +10,7 @@ import {
   SET_TASK_TITLE,
   ADD_USER_TO_BOARD,
   REMOVE_USER_FROM_BOARD,
+  FETCH_INITIAL_STATE,
 } from "../types";
 
 const handlers = {
@@ -61,6 +62,10 @@ const handlers = {
   [REMOVE_USER_FROM_BOARD]: (state, { payload }) => ({
     ...state,
     invited: payload,
+  }),
+  [FETCH_INITIAL_STATE]: (state, { payload }) => ({
+    ...state,
+    ...payload,
   }),
   DEFAULT: (state) => state,
 };

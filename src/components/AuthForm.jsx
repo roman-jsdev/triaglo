@@ -61,6 +61,15 @@ const Button = styled.button`
   &:hover {
     background-color: var(--add-button-hover-background);
   }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+
+    &:hover {
+      background-color: var(--add-button-background);
+    }
+  }
 `;
 
 export const AuthForm = ({
@@ -72,6 +81,7 @@ export const AuthForm = ({
   password,
   setPassword,
   type,
+  isLoading,
 }) => {
   return (
     <FormWrapper>
@@ -105,7 +115,9 @@ export const AuthForm = ({
           placeholder="Enter your Password..."
           id="passwordInput"
         />
-        <Button type="submit">{type === "login" ? "Login" : "Register"}</Button>
+        <Button type="submit" disabled={isLoading}>
+          {type === "login" ? "Login" : "Register"}
+        </Button>
       </Form>
     </FormWrapper>
   );

@@ -23,7 +23,9 @@ export const UserState = ({ children }) => {
   const [userState, dispatch] = useReducer(userReducer, getInitialState());
 
   useEffect(() => {
-    localStorage.setItem(userState.userId, JSON.stringify(userState));
+    if (userState.userId) {
+      localStorage.setItem(userState.userId, JSON.stringify(userState));
+    }
   }, [userState]);
 
   const addBoardToUser = (id) => {

@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 import { DndContext } from "./DndContext";
 import {
   SET_COLUMN_ORDER,
@@ -11,35 +11,42 @@ import {
   SET_COLUMN_TITLE,
   SET_TASK_TITLE,
   ADD_USER_TO_BOARD,
+  FETCH_INITIAL_STATE,
 } from "../types";
 import { dndReducer } from "./dndReducer";
-import { useInitialBoardState } from "../../hooks/useInitialBoardState";
 import { useBoardId } from "../../hooks/useBoardId";
 import { useAuthState } from "../AuthContext/AuthContext";
 import { useDB } from "../../hooks/useDB";
+import { useUserState } from "../UserContext/UserContext";
 
 export const DndState = ({ children }) => {
-  const [initialState] = useInitialBoardState();
   const { authState } = useAuthState();
-
-  let initialStateWithAuth = initialState;
-
-  if (!initialState.owner) {
-    initialStateWithAuth = {
-      ...initialState,
-      owner: authState.id,
-    };
-  }
-
-  const [dndState, dispatch] = useReducer(dndReducer, initialStateWithAuth);
-
+  const { userState } = useUserState();
   const [boardId] = useBoardId();
 
-  const [fetchDb] = useDB("put", `boards/${boardId}`, JSON.stringify(dndState));
+  const currentUserId = userState.userId;
+  const [getDB, isLoading, response] = useDB(
+    "get",
+    `${currentUserId}/boards/${boardId}`
+  );
+
+  const [dndState, dispatch] = useReducer(dndReducer, { isLoading: true });
+
+  const [putDB] = useDB("put", `${currentUserId}/boards/${boardId}`, dndState);
 
   useEffect(() => {
-    fetchDb();
-  }, [fetchDb]);
+    putDB();
+  }, [putDB]);
+
+  const fetchInitialState = useCallback(() => {
+    getDB();
+    if (!isLoading) {
+      dispatch({
+        type: FETCH_INITIAL_STATE,
+        payload: { ...response, owner: authState.id, isLoading: false },
+      });
+    }
+  }, [isLoading]);
 
   const setColumnOrder = (source, destination, draggableId) => {
     const newColumnOrder = Array.from(dndState.columnOrder);
@@ -236,6 +243,7 @@ export const DndState = ({ children }) => {
         setTaskTitle,
         addUserToBoard,
         removeUserFromBoard,
+        fetchInitialState,
       }}
     >
       {children}

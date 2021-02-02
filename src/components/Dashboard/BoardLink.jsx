@@ -52,27 +52,31 @@ const DeleteBtn = styled.div`
 `;
 
 export const BoardLink = ({ to, type, title, id, onClick }) => {
-  const { removeBoardFromUser } = useUserState();
   const [boardId] = useBoardId(title);
-  const { userState } = useUserState();
+  const currentUserId = sessionStorage.getItem("userId");
+  const { userState, removeBoardFromUser } = useUserState();
 
-  const currentUserId = userState.userId;
-  const [deleteFromDB, isLoading] = useDB(
+  const [deleteFromUserDB] = useDB(
     "delete",
-    `${currentUserId}/boards/${boardId}`
+    `users/${currentUserId}/boards/${boardId}`
   );
 
+  const [deleteFromBoardDB] = useDB("delete", `boards/${boardId}`);
+
   const handleDelete = () => {
-    deleteFromDB();
-    removeBoardFromUser(title);
-    localStorage.removeItem(title);
+    if(userState.boards[boardId].board === 'owner') {
+      removeBoardFromUser(boardId);
+      deleteFromUserDB();
+      deleteFromBoardDB();
+    } else {
+      removeBoardFromUser(boardId);
+      deleteFromUserDB();
+    }
   };
 
   return (
     <>
-      {!isLoading ? (
-        null
-      ) : (
+      {
         <Wrapper onClick={onClick}>
           <Link to={type === "new" ? `/${id}` : to}>
             <span>{title}</span>
@@ -83,7 +87,7 @@ export const BoardLink = ({ to, type, title, id, onClick }) => {
             </DeleteBtn>
           )}
         </Wrapper>
-      )}
+      }
     </>
   );
 };

@@ -1,48 +1,81 @@
-import { useEffect, useReducer } from "react";
-import { ADD_BOARD_TO_USER, REMOVE_BOARD_FROM_USER } from "../types";
+import { useCallback, useReducer } from "react";
+import { useDB } from "../../hooks/useDB";
+import { initialUserState } from "../../initialData";
+import {
+  ADD_BOARD_TO_USER,
+  FETCH_INITIAL_USER_STATE,
+  REMOVE_BOARD_FROM_USER,
+  SET_INITIAL_USER_STATE,
+  SET_USER_STATE_LOADING,
+} from "../types";
 import { UserContext } from "./UserContext";
 import { userReducer } from "./userReducer";
 
-const initialState = {
-  userId: sessionStorage.getItem("userId"),
-  userEmail: sessionStorage.getItem("email"),
-  boards: [],
-};
-
 export const UserState = ({ children }) => {
-  const getInitialState = () => {
-    if (localStorage.getItem(sessionStorage.getItem("userId"))) {
-      const initialDbState = JSON.parse(
-        localStorage.getItem(sessionStorage.getItem("userId"))
-      );
-      return initialDbState;
-    } else {
-      return initialState;
-    }
-  };
-  const [userState, dispatch] = useReducer(userReducer, getInitialState());
+  const [userState, dispatch] = useReducer(userReducer, initialUserState);
 
-  useEffect(() => {
-    if (userState.userId) {
-      localStorage.setItem(userState.userId, JSON.stringify(userState));
-    }
-  }, [userState]);
+  const [initDB] = useDB("put", "asyncPath");
 
-  const addBoardToUser = (id) => {
-    const currentBoards = [...userState.boards];
-    const payload = [...currentBoards, id];
+  const addBoardToUser = (board) => {
+    const payload = { ...userState.boards, ...board };
     dispatch({ type: ADD_BOARD_TO_USER, payload });
   };
 
   const removeBoardFromUser = (id) => {
-    const currentBoards = [...userState.boards];
-    const payload = currentBoards.filter((e) => e !== id);
+    const payload = Object.keys(userState.boards)
+      .filter((key) => key !== id)
+      .reduce((obj, key) => {
+        return {
+          ...obj,
+          [key]: userState.boards[key],
+        };
+      }, {});
     dispatch({ type: REMOVE_BOARD_FROM_USER, payload });
   };
 
+  const setInitialUserState = useCallback(() => {
+    dispatch({ type: SET_INITIAL_USER_STATE, payload: initialUserState });
+  }, []);
+
+  const setUserStateLoading = (type) => {
+    dispatch({ type: SET_USER_STATE_LOADING, payload: type });
+  };
+
+  const initUserState = useCallback(
+    (response) => {
+      if (!response.userId) {
+        initDB(
+          {
+            boards: response.boards,
+            userId: sessionStorage.getItem("userId"),
+            email: sessionStorage.getItem("email"),
+            isLoading: false,
+          },
+          `users/${sessionStorage.getItem("userId")}`
+        );
+      }
+      const finalResponse = response.email ? response : {};
+      dispatch({
+        type: FETCH_INITIAL_USER_STATE,
+        payload: {
+          ...finalResponse,
+          isLoading: false,
+        },
+      });
+    },
+    [initDB]
+  );
+
   return (
     <UserContext.Provider
-      value={{ userState, addBoardToUser, removeBoardFromUser }}
+      value={{
+        userState,
+        initUserState,
+        addBoardToUser,
+        removeBoardFromUser,
+        setInitialUserState,
+        setUserStateLoading,
+      }}
     >
       {children}
     </UserContext.Provider>

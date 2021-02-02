@@ -1,5 +1,6 @@
 import { useCallback, useReducer } from "react";
 import { AUTH_LOGOUT, AUTH_SUCCESS } from "../types";
+import { useUserState } from "../UserContext/UserContext";
 import { AuthContext } from "./AuthContext";
 import { authReducer } from "./authReducer";
 
@@ -7,14 +8,17 @@ const initialState = { token: null, id: null, email: null };
 
 export const AuthState = ({ children }) => {
   const [authState, dispatch] = useReducer(authReducer, initialState);
+  const { setInitialUserState } = useUserState();
 
   const logout = useCallback(() => {
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("userId");
     sessionStorage.removeItem("email");
     sessionStorage.removeItem("expirationDate");
+    localStorage.clear();
     dispatch({ type: AUTH_LOGOUT });
-  }, []);
+    setInitialUserState()
+  }, [setInitialUserState]);
 
   const login = useCallback(
     (token, id, email) => {
@@ -53,4 +57,3 @@ export const AuthState = ({ children }) => {
     </AuthContext.Provider>
   );
 };
-   

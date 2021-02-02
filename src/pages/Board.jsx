@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { AddNewColumn } from "../components/AddNewColumnBtn/AddNewColumnBtn";
 import { BoardHeader } from "../components/BoardHeader/BoardHeader";
 import { Column } from "../components/Column";
+import { Loader } from "../components/Loader";
 import { useAuthState } from "../store/AuthContext/AuthContext";
 import { useDndState } from "../store/DndContext/DndContext";
 
@@ -29,7 +30,7 @@ export const Board = () => {
     setColumnOrder,
     setNewSameColumn,
     setNewColumn,
-    fetchInitialState
+    fetchInitialState,
   } = useDndState();
 
   const { authState } = useAuthState();
@@ -89,10 +90,10 @@ export const Board = () => {
   return (
     <>
       {dndState.isLoading ? (
-        <p>Loading...</p>
+        <Loader />
       ) : (
         <>
-          {getAccess('owner') || getAccess('invited') ? (
+          {getAccess("owner") || getAccess("invited") ? (
             <>
               <BoardHeader />
               <DragDropContext onDragEnd={onDragEnd}>

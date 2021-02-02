@@ -15,35 +15,55 @@ import {
 } from "../types";
 import { dndReducer } from "./dndReducer";
 import { useBoardId } from "../../hooks/useBoardId";
-import { useAuthState } from "../AuthContext/AuthContext";
 import { useDB } from "../../hooks/useDB";
 import { useUserState } from "../UserContext/UserContext";
 
 export const DndState = ({ children }) => {
-  const { authState } = useAuthState();
-  const { userState } = useUserState();
   const [boardId] = useBoardId();
 
-  const currentUserId = userState.userId;
-  const [getDB, isLoading, response] = useDB(
-    "get",
-    `${currentUserId}/boards/${boardId}`
+  const [getDB, isLoading, response] = useDB("get", `boards/${boardId}`);
+
+  const boardObj = { board: "notOwner" };
+
+  const [addBoard] = useDB(
+    "put",
+    `users/${sessionStorage.getItem("userId")}/boards/${boardId}`,
+    boardObj
   );
 
-  const [dndState, dispatch] = useReducer(dndReducer, { isLoading: true });
+  const [dndState, dispatch] = useReducer(dndReducer, {
+    owner: sessionStorage.getItem("userId"),
+    isLoading: true,
+  });
 
-  const [putDB] = useDB("put", `${currentUserId}/boards/${boardId}`, dndState);
+  const { addBoardToUser } = useUserState();
+
+  const [putDB] = useDB("put", `boards/${boardId}`, dndState);
 
   useEffect(() => {
-    putDB();
+    if  (response)  {
+      putDB();
+    }
   }, [putDB]);
 
   const fetchInitialState = useCallback(() => {
-    getDB();
+    if (!response) {
+      getDB();
+    }
     if (!isLoading) {
+      if (
+        response.invited &&
+        response.invited.includes(sessionStorage.getItem("email"))
+      ) {
+        if (response.owner !== sessionStorage.getItem("userId")) {
+          addBoardToUser({ board: "notOwner" });
+          addBoard();
+        }
+      }
+
       dispatch({
         type: FETCH_INITIAL_STATE,
-        payload: { ...response, owner: authState.id, isLoading: false },
+        payload: { ...response, isLoading: false },
       });
     }
   }, [isLoading]);

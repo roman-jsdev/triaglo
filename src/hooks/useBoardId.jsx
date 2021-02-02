@@ -6,3 +6,4 @@ export const useBoardId = (id) => {
   const boardId = boardInitialId.split("/").join("");
   return [boardId];
 };
+;

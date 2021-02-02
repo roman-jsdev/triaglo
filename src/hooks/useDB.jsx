@@ -5,18 +5,28 @@ import { initialData } from "../initialData";
 export const useDB = (method, path, data) => {
   const [response, setResponse] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const url = `https://triaglo-default-rtdb.firebaseio.com/${path}.json?auth=${process.env.REACT_APP_DB_KEY}`;
+  const getURL = (path) =>
+    `https://triaglo-default-rtdb.firebaseio.com/${path}.json?auth=${process.env.REACT_APP_DB_KEY}`;
 
   const getData = (responseFromDb) => {
     let modResponse = responseFromDb.data;
+
+    if (modResponse) {
+      if (modResponse.email) {
+        return modResponse;
+      }
+    }
+
     if (responseFromDb.data === null) {
       return (modResponse = initialData);
     }
+
     const isBoard = JSON.stringify(modResponse).substr(2).slice(0, 5);
 
-    if (isBoard === "board") {
+    if (isBoard.includes("board")) {
       return responseFromDb.data;
     }
+
     if (!modResponse.invited) {
       modResponse = {
         ...modResponse,
@@ -50,39 +60,49 @@ export const useDB = (method, path, data) => {
     return modResponse;
   };
 
-  const fetchDB = useCallback(async () => {
-    switch (method) {
-      case "put":
-        try {
-          const responseFromDb = await axios.put(url, data);
-          setResponse(getData(responseFromDb));
-          setIsLoading(false);
-        } catch (e) {
-          alert(e);
-        }
-        break;
-      case "get":
-        try {
-          const responseFromDb = await axios.get(url);
-          setResponse(getData(responseFromDb));
-          setIsLoading(false);
-        } catch (e) {
-          alert(e);
-        }
-        break;
-      case "delete":
-        try {
-          const responseFromDb = await axios.delete(url);
-          setResponse(getData(responseFromDb));
-          setIsLoading(false);
-        } catch (e) {
-          alert(e);
-        }
-        break;
-      default:
-        console.warn("Some problems with connection method");
-    }
-  }, [url, method, data]);
+  const fetchDB = useCallback(
+    async (asyncData, asyncPath) => {
+      switch (method) {
+        case "put":
+          try {
+            const responseFromDb = await axios.put(
+              asyncPath ? getURL(asyncPath) : getURL(path),
+              asyncData || data
+            );
+            setResponse(getData(responseFromDb));
+            setIsLoading(false);
+          } catch (e) {
+            alert(e);
+          }
+          break;
+        case "get":
+          try {
+            const responseFromDb = await axios.get(
+              asyncPath ? getURL(asyncPath) : getURL(path)
+            );
+            setResponse(getData(responseFromDb));
+            setIsLoading(false);
+          } catch (e) {
+            alert(e);
+          }
+          break;
+        case "delete":
+          try {
+            const responseFromDb = await axios.delete(
+              asyncPath ? getURL(asyncPath) : getURL(path)
+            );
+            setResponse(getData(responseFromDb));
+            setIsLoading(false);
+          } catch (e) {
+            alert(e);
+          }
+          break;
+        default:
+          console.warn("Some problems with connection method");
+      }
+    },
+    [path, method, data]
+  );
 
   return [fetchDB, isLoading, response];
 };

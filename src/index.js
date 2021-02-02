@@ -11,13 +11,13 @@ import { UserState } from './store/UserContext/UserState';
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <AuthState>
-        <UserState>
-          <App />
-        </UserState>
-      </AuthState>
+      <UserState>
+        <AuthState>
+        <App />
+        </AuthState>
+      </UserState>
     </BrowserRouter>
-  </React.StrictMode>,
+  </React.StrictMode >,
   document.getElementById('root')
 );
 

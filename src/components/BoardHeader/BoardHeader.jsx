@@ -1,11 +1,12 @@
 import { useRef, useState } from "react";
-import { useAuthState } from "../../store/AuthContext/AuthContext";
-import { useDndState } from "../../store/DndContext/DndContext";
+import { useBoardOwner } from "../../hooks/useBoardOwner";
+import { useOutsideClick } from "../../hooks/useOutsideClick";
+import { useBoardState } from "../../store/BoardContext/BoardContext";
+import { validateEmail } from "../../utils";
 import {
   Button,
   ClosePopup,
   Input,
-  Overlay,
   PopupHeader,
   PopupInvite,
   Wrapper,
@@ -17,62 +18,63 @@ import {
 } from "./Styled";
 
 export const BoardHeader = () => {
-  const [value, setValue] = useState("");
-  const { dndState, addUserToBoard, removeUserFromBoard } = useDndState();
-  const { authState } = useAuthState();
+  const [email, setEmail] = useState("");
+  const {
+    boardState: { invited },
+    addUserToBoard,
+    removeUserFromBoard,
+  } = useBoardState();
+  const [isOwner] = useBoardOwner();
   const popupRef = useRef();
-  const overlayRef = useRef();
 
-  const invitedList = dndState.invited;
-
-  const ownerId = dndState.owner;
-  const userId = authState.id;
-
-  const isOwner = ownerId === userId;
-
-  const handleClose = () => {
-    popupRef.current.classList.toggle("opened");
-    overlayRef.current.classList.toggle("opened");
-    setValue("");
+  const openPopup = () => {
+    popupRef.current.classList.add("opened");
   };
 
-  const handleAddUser = () => {
-    if (invitedList.includes(value)) {
+  const closePopup = () => {
+    popupRef.current.classList.remove("opened");
+    setEmail("");
+  };
+
+  useOutsideClick(popupRef, closePopup);
+
+  const addUser = () => {
+    if (invited.includes(email)) {
       alert("User already invited");
-      setValue("");
+      setEmail("");
       return;
     }
 
-    const re = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
-    const valueValid = re.test(value);
+    const [isEmailValid] = validateEmail(email);
 
-    if (valueValid) {
-      addUserToBoard(value);
-      setValue("");
+    if (isEmailValid) {
+      addUserToBoard(email);
+      setEmail("");
     } else {
       alert("Enter correct email");
     }
   };
 
-  const handleDeleteUser = (e) => {
-    const email = e.target.closest("[data-user]").firstElementChild.innerHTML;
-    removeUserFromBoard(email);
+  const handleDeleteUser = ({ target }) => {
+    const {
+      firstElementChild: { innerHTML },
+    } = target.closest("[data-user]");
+    removeUserFromBoard(innerHTML);
   };
 
-  const handleKeyPress = (e) => {
-    if (e.key !== "Enter") return;
-    handleAddUser();
+  const addUserOnEnterPress = ({ key }) => {
+    if (key === "Enter") addUser();
   };
 
   return (
     <Wrapper>
-      <Button onClick={handleClose}>Invite</Button>
+      <Button onClick={openPopup}>Invite</Button>
       <PopupInvite ref={popupRef}>
         <PopupHeader>
           {isOwner
             ? "Invite to this board"
             : "Ask owner of this board for invitations"}
-          <ClosePopup onClick={handleClose}>
+          <ClosePopup onClick={closePopup}>
             <i className="fas fa-times" />
           </ClosePopup>
         </PopupHeader>
@@ -81,19 +83,19 @@ export const BoardHeader = () => {
             <Input
               type="email"
               placeholder="Enter email..."
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
-              onKeyPress={handleKeyPress}
+              value={email}
+              onChange={({ target }) => setEmail(target.value)}
+              onKeyPress={addUserOnEnterPress}
             />
-            <InviteBtn onClick={handleAddUser}>Send Invite</InviteBtn>
+            <InviteBtn onClick={addUser}>Send Invite</InviteBtn>
           </>
         )}
-        {!!invitedList.length && (
+        {!!invited.length && (
           <>
             <InvitedListHeader>Invited users</InvitedListHeader>
-            {invitedList.map((e, i) => (
-              <InvitedElementWrapper key={i} data-user>
-                <InvitedElementName>{e}</InvitedElementName>
+            {invited.map((user, index) => (
+              <InvitedElementWrapper key={index} data-user>
+                <InvitedElementName>{user}</InvitedElementName>
                 {isOwner && (
                   <InvitedElementDelete onClick={handleDeleteUser}>
                     <i className="far fa-trash-alt" />
@@ -104,7 +106,6 @@ export const BoardHeader = () => {
           </>
         )}
       </PopupInvite>
-      <Overlay ref={overlayRef} onClick={handleClose} />
     </Wrapper>
   );
 };

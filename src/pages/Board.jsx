@@ -3,10 +3,10 @@ import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import { AddNewColumn } from "../components/AddNewColumnBtn/AddNewColumnBtn";
 import { BoardHeader } from "../components/BoardHeader/BoardHeader";
-import { Column } from "../components/Column";
-import { Loader } from "../components/Loader";
+import { Column } from "../components/Column/Column";
+import { Loader } from "../components/Loader/Loader";
 import { useAuthState } from "../store/AuthContext/AuthContext";
-import { useDndState } from "../store/DndContext/DndContext";
+import { useBoardState } from "../store/BoardContext/BoardContext";
 
 const Container = styled.div`
   display: flex;
@@ -26,23 +26,23 @@ const InnerList = ({ column, taskMap, index }) => {
 
 export const Board = () => {
   const {
-    dndState,
+    boardState,
     setColumnOrder,
     setNewSameColumn,
     setNewColumn,
     fetchInitialState,
-  } = useDndState();
+  } = useBoardState();
 
   const { authState } = useAuthState();
 
   const isLoggedIn = sessionStorage.getItem("token");
 
   const getAccess = (type) => {
-    document.body.style.backgroundColor = dndState.bg;
+    document.body.style.backgroundColor = boardState.bg;
 
-    const invitedList = dndState.invited;
+    const invitedList = boardState.invited;
 
-    const ownerId = dndState.owner;
+    const ownerId = boardState.owner;
     const userId = authState.id;
     const userEmail = authState.email;
 
@@ -70,8 +70,8 @@ export const Board = () => {
       return;
     }
 
-    const start = dndState.columns[source.droppableId];
-    const finish = dndState.columns[destination.droppableId];
+    const start = boardState.columns[source.droppableId];
+    const finish = boardState.columns[destination.droppableId];
 
     if (start === finish) {
       setNewSameColumn(start, source, destination, draggableId);
@@ -82,14 +82,14 @@ export const Board = () => {
   };
 
   useEffect(() => {
-    if(dndState.isLoading) {
+    if  (boardState.isLoading) {
       fetchInitialState()
-    }  
-  },[fetchInitialState, dndState.isLoading])
+    }
+  }, [fetchInitialState, boardState.isLoading]);
 
   return (
     <>
-      {dndState.isLoading ? (
+      {boardState.isLoading ? (
         <Loader />
       ) : (
         <>
@@ -107,13 +107,13 @@ export const Board = () => {
                       ref={provided.innerRef}
                       {...provided.droppableProps}
                     >
-                      {dndState.columnOrder.map((columnId, index) => {
-                        const column = dndState.columns[columnId];
+                      {boardState.columnOrder.map((columnId, index) => {
+                        const column = boardState.columns[columnId];
                         return (
                           <InnerList
                             key={column.id}
                             column={column}
-                            taskMap={dndState.tasks}
+                            taskMap={boardState.tasks}
                             index={index}
                           />
                         );

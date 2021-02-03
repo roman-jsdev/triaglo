@@ -1,86 +1,44 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import styled from "styled-components";
+import { useEffect, useState } from "react";
 import { useBoardId } from "../../hooks/useBoardId";
 import { useDB } from "../../hooks/useDB";
 import { useUserState } from "../../store/UserContext/UserContext";
-import { Loader } from "../Loader";
-import { BoardLink } from "./BoardLink";
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: center;
-`;
-
-const BoardsWrapper = styled.div`
-  display: flex;
-  max-width: 900px;
-  width: 100%;
-  margin: 18px;
-  flex-wrap: wrap;
-`;
-
-const SideBar = styled.div`
-  position: sticky;
-  top: 0;
-`;
+import { Loader } from "../Loader/Loader";
+import { BoardLink } from "../BoardLink/BoardLink";
+import { Wrapper, BoardsWrapper, SideBar } from "./Styled";
+import { useGetBoardsLinks } from "../../hooks/useGetBoardLinks";
 
 export const DashBoard = () => {
-  const {
-    userState,
-    initUserState,
-    addBoardToUser,
-    setUserStateLoading,
-  } = useUserState();
-
   const [mounted, setMounted] = useState(false);
-
+  const { initUserState, addBoardToUser, setUserStateLoading } = useUserState();
   const userId = sessionStorage.getItem("userId");
-
-  const [fetchUser, isLoading, responseUser] = useDB(
+  const [fetchUser, isDBLoading, fetchedUserData] = useDB(
     "get",
     `users/${sessionStorage.getItem("userId")}`
   );
+  const [getLinks] = useGetBoardsLinks(isDBLoading);
 
-  const response = useMemo(() => userState.boards || {}, [userState.boards]);
+  const generatedId = `board/${Date.now()}`;
+  const boardId = useBoardId(generatedId).toString();
 
-  const getLinks = useCallback(() => {
-    if (!isLoading && !userState.isLoading) {
-      const boards = Object.keys(response).map((e) => e) || [];
-      const links = [
-        ...boards.map((e) => {
-          const splitStr = e.split(/(\d+)/);
-          return { to: `/${splitStr[0]}/${splitStr[1]}`, title: e };
-        }),
-        { to: "/", type: "new", title: "+ Add New Board" },
-      ];
-      return links;
-    }
-  }, [isLoading, response, userState.isLoading]);
+  const [addBoardToDB] = useDB("put", `users/${userId}/boards/${boardId}`, {
+    board: "owner",
+  });
 
-  const id = `board/${Date.now()}`;
-  const board = useBoardId(id).toString();
-
-  const boardObj = { board: "owner" };
-
-  const [addBoard] = useDB("put", `users/${userId}/boards/${board}`, boardObj);
-
-  const handleClick = (type) => {
+  const routeToBoard = (type) => {
     if (type !== "new") return;
-    addBoard();
-    addBoardToUser(boardObj);
+    addBoardToDB();
+    addBoardToUser({ board: "owner" });
     setUserStateLoading(true);
   };
 
   useEffect(() => {
-    if (!responseUser) {
+    if (!fetchedUserData) {
       fetchUser();
     }
-    if (!isLoading) {
-      initUserState(responseUser);
+    if (!isDBLoading) {
+      initUserState(fetchedUserData);
     }
-  }, [isLoading]);
+  }, [isDBLoading]);
 
   useEffect(() => {
     setMounted(true);
@@ -91,7 +49,7 @@ export const DashBoard = () => {
 
   return (
     <>
-      {isLoading ? (
+      {isDBLoading ? (
         <Loader />
       ) : (
         <Wrapper>
@@ -100,14 +58,14 @@ export const DashBoard = () => {
           </SideBar>
           <BoardsWrapper>
             {getLinks()
-              ? getLinks().map((e, i) => (
+              ? getLinks().map(({   to, type, title   }, index) => (
                   <BoardLink
-                    key={i}
-                    to={e.to}
-                    title={e.title}
-                    type={e.type}
-                    id={id}
-                    onClick={() => handleClick(e.type)}
+                    key={index}
+                    to={to}
+                    title={title}
+                    type={type}
+                    id={generatedId}
+                    onClick={() => routeToBoard(type)}
                   />
                 ))
               : null}

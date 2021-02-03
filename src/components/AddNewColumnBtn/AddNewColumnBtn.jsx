@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useDndState } from "../../store/DndContext/DndContext";
+import { useRef, useState } from "react";
+import { useOutsideClick } from "../../hooks/useOutsideClick";
+import { useBoardState } from "../../store/BoardContext/BoardContext";
 import {
   AddButton,
   AddLink,
@@ -11,86 +12,57 @@ import {
 } from "./Styled";
 
 export const AddNewColumn = () => {
-  const { addNewColumn } = useDndState();
-  const [value, setValue] = useState("");
+  const { addNewColumn } = useBoardState();
+  const [inputValue, setInputValue] = useState("");
   const buttonsRef = useRef();
   const addLinkRef = useRef();
   const inputRef = useRef();
   const wrapperRef = useRef();
 
   const openButtonsWrapper = () => {
-    buttonsRef.current.style.display =
-      buttonsRef.current.style.display === "none" ? "flex" : "none";
-    addLinkRef.current.style.display =
-      addLinkRef.current.style.display === "block" ? "none" : "none";
+    wrapperRef.current.classList.add("active");
+    buttonsRef.current.classList.add("show");
+    addLinkRef.current.classList.add("hide");
     inputRef.current.focus();
-    wrapperRef.current.classList.add("active-wrapper");
   };
 
-  const closeButtonsWrapper = useCallback(() => {
-    addLinkRef.current.style.display = "block";
-    buttonsRef.current.style.display = "none";
-    wrapperRef.current.classList.remove("active-wrapper");
-  }, []);
+  const closeButtonsWrapper = () => {
+    wrapperRef.current.classList.remove("active");
+    buttonsRef.current.classList.remove("show");
+    addLinkRef.current.classList.remove("hide");
+    setInputValue("");
+  };
 
-  const onAdd = () => {
-    if (!value) return;
-    addNewColumn(value);
-    setValue("");
+  useOutsideClick(wrapperRef, closeButtonsWrapper);
+
+  const addColumn = () => {
+    if (!inputValue) return;
+    addNewColumn(inputValue);
     closeButtonsWrapper();
+    setInputValue("");
   };
 
-  const onEnterPress = (event) => {
-    if (event.key !== "Enter") {
-      return;
-    }
-    if (value) {
-      onAdd();
-    } else {
-      return;
-    }
+  const addColumnOnEnterPress = (event) => {
+    if (event.key !== "Enter" || !inputValue) return;
+    addColumn();
   };
-
-  const handleClick = useCallback(
-    (e) => {
-      if (addLinkRef.current !== null) {
-        const nodes = [
-          wrapperRef.current,
-          addLinkRef.current,
-          addLinkRef.current.firstElementChild,
-          buttonsRef.current,
-          inputRef.current,
-          buttonsRef.current.lastElementChild,
-          buttonsRef.current.lastElementChild.firstElementChild,
-        ];
-        if (nodes.indexOf(e.target) === -1) closeButtonsWrapper();
-        setValue("");
-      }
-    },
-    [closeButtonsWrapper]
-  );
-
-  useEffect(() => {
-    document.body.addEventListener("click", handleClick);
-    return () => document.body.removeEventListener("click", handleClick);
-  }, [handleClick]);
 
   return (
-    <Wrapper ref={wrapperRef} onKeyPress={onEnterPress}>
+    <Wrapper ref={wrapperRef} onKeyPress={addColumnOnEnterPress}>
       <AddLink onClick={openButtonsWrapper} ref={addLinkRef}>
-        <i className="fas fa-plus"></i> Add new column
+        <i className="fas fa-plus" /> Add new column
       </AddLink>
-      <ButtonsWrapper ref={buttonsRef} style={{ display: "none" }}>
+      <ButtonsWrapper ref={buttonsRef}>
         <Input
-          value={value}
+          value={inputValue}
           ref={inputRef}
           placeholder={"Enter title of new list..."}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={(e) => setInputValue(e.target.value)}
         />
         <Buttons>
-          <AddButton onClick={onAdd}>Add List</AddButton>
+          <AddButton onClick={addColumn}>Add List</AddButton>
           <CloseButton>
-            <i className="fas fa-times"></i>
+            <i className="fas fa-times" />
           </CloseButton>
         </Buttons>
       </ButtonsWrapper>

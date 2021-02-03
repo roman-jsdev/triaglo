@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useReducer } from "react";
-import { DndContext } from "./DndContext";
+import { BoardContext } from "./BoardContext";
 import {
   SET_COLUMN_ORDER,
   SET_NEW_SAME_COLUMN,
@@ -13,12 +13,12 @@ import {
   ADD_USER_TO_BOARD,
   FETCH_INITIAL_STATE,
 } from "../types";
-import { dndReducer } from "./dndReducer";
+import { boardReducer } from "./boardReducer";
 import { useBoardId } from "../../hooks/useBoardId";
 import { useDB } from "../../hooks/useDB";
 import { useUserState } from "../UserContext/UserContext";
 
-export const DndState = ({ children }) => {
+export const BoardState = ({ children }) => {
   const [boardId] = useBoardId();
 
   const [getDB, isLoading, response] = useDB("get", `boards/${boardId}`);
@@ -31,17 +31,17 @@ export const DndState = ({ children }) => {
     boardObj
   );
 
-  const [dndState, dispatch] = useReducer(dndReducer, {
+  const [boardState, dispatch] = useReducer(boardReducer, {
     owner: sessionStorage.getItem("userId"),
     isLoading: true,
   });
 
   const { addBoardToUser } = useUserState();
 
-  const [putDB] = useDB("put", `boards/${boardId}`, dndState);
+  const [putDB] = useDB("put", `boards/${boardId}`, boardState);
 
   useEffect(() => {
-    if  (response)  {
+    if (response) {
       putDB();
     }
   }, [putDB]);
@@ -69,7 +69,7 @@ export const DndState = ({ children }) => {
   }, [isLoading]);
 
   const setColumnOrder = (source, destination, draggableId) => {
-    const newColumnOrder = Array.from(dndState.columnOrder);
+    const newColumnOrder = Array.from(boardState.columnOrder);
     newColumnOrder.splice(source.index, 1);
     newColumnOrder.splice(destination.index, 0, draggableId);
     dispatch({ type: SET_COLUMN_ORDER, payload: newColumnOrder });
@@ -86,28 +86,28 @@ export const DndState = ({ children }) => {
     };
 
     const payload = {
-      ...dndState.columns,
+      ...boardState.columns,
       [newColumn.id]: newColumn,
     };
     dispatch({ type: SET_NEW_SAME_COLUMN, payload });
   };
 
   const setNewColumn = (start, finish, source, destination, draggableId) => {
-    const startTaskIds = Array.from(start.taskIds);
+    const startTaskIds = [...start.taskIds];
     startTaskIds.splice(source.index, 1);
     const newStart = {
       ...start,
       taskIds: startTaskIds,
     };
 
-    const finishTaskIds = Array.from(finish.taskIds);
+    const finishTaskIds = [...finish.taskIds];
     finishTaskIds.splice(destination.index, 0, draggableId);
     const newFinish = {
       ...finish,
       taskIds: finishTaskIds,
     };
     const payload = {
-      ...dndState.columns,
+      ...boardState.columns,
       [newStart.id]: newStart,
       [newFinish.id]: newFinish,
     };
@@ -123,11 +123,10 @@ export const DndState = ({ children }) => {
         taskIds: [],
       },
     };
-    const newOrder = [...dndState.columnOrder];
-    newOrder.push(`column-${id}`);
+    const newOrder = [...boardState.columnOrder, `column-${id}`];
     const payload = {
       columns: {
-        ...dndState.columns,
+        ...boardState.columns,
         ...newColumn,
       },
       order: newOrder,
@@ -136,8 +135,8 @@ export const DndState = ({ children }) => {
   };
 
   const removeColumn = (id) => {
-    const currentColumns = dndState.columns;
-    const currentOrder = dndState.columnOrder;
+    const currentColumns = { ...boardState.columns };
+    const currentOrder = [...boardState.columnOrder];
 
     const filteredColumns = Object.keys(currentColumns)
       .filter((key) => key !== id)
@@ -148,10 +147,10 @@ export const DndState = ({ children }) => {
         };
       }, {});
 
-    const filteredOrder = [...currentOrder.filter((e) => e !== id)];
+    const filteredOrder = [...currentOrder.filter((column) => column !== id)];
 
-    const currentTasks = { ...dndState.tasks };
-    const deletingTasks = [...currentColumns[id]["taskIds"]];
+    const currentTasks = { ...boardState.tasks };
+    const deletingTasks = [...currentColumns[id].taskIds];
 
     const filteredTasks = Object.keys(currentTasks)
       .filter((key) => !deletingTasks.includes(key))
@@ -179,13 +178,13 @@ export const DndState = ({ children }) => {
       },
     };
 
-    const currentColumns = { ...dndState.columns };
+    const currentColumns = { ...boardState.columns };
     const currentColumnsArray = currentColumns[columnId]["taskIds"];
     currentColumnsArray.push(`task-${id}`);
 
     const payload = {
       tasks: {
-        ...dndState.tasks,
+        ...boardState.tasks,
         ...newTask,
       },
       columns: currentColumns,
@@ -195,8 +194,8 @@ export const DndState = ({ children }) => {
   };
 
   const removeTask = (taskId, columnId) => {
-    const currentTasks = dndState.tasks;
-    const currentColumns = { ...dndState.columns };
+    const currentTasks = boardState.tasks;
+    const currentColumns = { ...boardState.columns };
 
     const filteredTasks = Object.keys(currentTasks)
       .filter((key) => key !== taskId)
@@ -221,7 +220,7 @@ export const DndState = ({ children }) => {
   };
 
   const setColumnTitle = (columnId, value) => {
-    const currentColumns = dndState.columns;
+    const currentColumns = boardState.columns;
     currentColumns[columnId].title = value;
     const payload = currentColumns;
 
@@ -229,7 +228,7 @@ export const DndState = ({ children }) => {
   };
 
   const setTaskTitle = (taskId, value) => {
-    const currentTasks = dndState.tasks;
+    const currentTasks = boardState.tasks;
     currentTasks[taskId].content = value;
     const payload = currentTasks;
 
@@ -237,21 +236,21 @@ export const DndState = ({ children }) => {
   };
 
   const addUserToBoard = (email) => {
-    const currentInvited = [...dndState.invited];
+    const currentInvited = [...boardState.invited];
     const invited = [...currentInvited, email];
     dispatch({ type: ADD_USER_TO_BOARD, payload: invited });
   };
 
   const removeUserFromBoard = (email) => {
-    const currentInvited = [...dndState.invited];
+    const currentInvited = [...boardState.invited];
     const invited = currentInvited.filter((e) => e !== email);
     dispatch({ type: ADD_USER_TO_BOARD, payload: invited });
   };
 
   return (
-    <DndContext.Provider
+    <BoardContext.Provider
       value={{
-        dndState,
+        boardState,
         setColumnOrder,
         setNewSameColumn,
         setNewColumn,
@@ -267,6 +266,6 @@ export const DndState = ({ children }) => {
       }}
     >
       {children}
-    </DndContext.Provider>
+    </BoardContext.Provider>
   );
 };

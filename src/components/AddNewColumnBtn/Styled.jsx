@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Wrapper = styled.div`
   margin: 8px;
-  color: white;
+  color: var(--main-light-color);
   font-size: 16px;
   padding: 5px;
   font-weight: 600;
@@ -15,18 +15,33 @@ export const Wrapper = styled.div`
   flex-direction: column;
   text-align: center;
   transition: all 0.3s;
+
   &:hover {
-    background-color: #f9f9f961;
+    background-color: var(--main-light-transparent-background-hover);
+  }
+
+  &.active {
+    background-color: var(--column-secondary-background) !important;
   }
 `;
 
 export const AddLink = styled.p`
   cursor: pointer;
   user-select: none;
+  display: block;
+
+  &.hide {
+    display: none;
+  }
 `;
 
 export const ButtonsWrapper = styled.div`
   flex-direction: column;
+  display: none;
+
+  &.show {
+    display: flex;
+  }
 `;
 
 export const Input = styled.input`
@@ -34,6 +49,7 @@ export const Input = styled.input`
   border-radius: var(--main-border-radius);
   border: 1px solid #eee;
   padding: 5px;
+
   &:focus {
     outline: none;
     box-shadow: 0 0 0px 0.3px #0c4891;
@@ -55,6 +71,7 @@ export const AddButton = styled.div`
   transition: all 0.3s;
   font-size: 14px;
   font-weight: 400;
+
   &:hover {
     background-color: var(--add-button-hover-background);
   }

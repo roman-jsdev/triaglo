@@ -1,0 +1,50 @@
+import { Link } from "react-router-dom";
+import { useBoardId } from "../../hooks/useBoardId";
+import { useDB } from "../../hooks/useDB";
+import { useUserState } from "../../store/UserContext/UserContext";
+import { Wrapper, DeleteBtn } from "./Styled";
+
+export const BoardLink = ({ to, type, title, id, onClick }) => {
+  const [boardId] = useBoardId(title);
+  const currentUserId = sessionStorage.getItem("userId");
+
+  const {
+    userState: { boards },
+    removeBoardFromUser,
+  } = useUserState();
+
+  const [deleteFromUserDB] = useDB(
+    "delete",
+    `users/${currentUserId}/boards/${boardId}`
+  );
+
+  const [deleteFromBoardDB] = useDB("delete", `boards/${boardId}`);
+
+  const deleteBoard = () => {
+    if (boards[boardId].board === "owner") {
+      removeBoardFromUser(boardId);
+      deleteFromUserDB();
+      deleteFromBoardDB();
+    } else {
+      removeBoardFromUser(boardId);
+      deleteFromUserDB();
+    }
+  };
+
+  return (
+    <>
+      {
+        <Wrapper onClick={onClick}>
+          <Link to={type === "new" ? `/${id}` : to}>
+            <span>{title}</span>
+          </Link>
+          {type === "new" ? null : (
+            <DeleteBtn onClick={deleteBoard}>
+              <i className="fas fa-trash-alt" />
+            </DeleteBtn>
+          )}
+        </Wrapper>
+      }
+    </>
+  );
+};

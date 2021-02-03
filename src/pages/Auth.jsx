@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { AuthForm } from "../components/AuthForm";
+import { AuthForm } from "../components/AuthForm/AuthForm";
 import { useAuth } from "../hooks/useAuth";
 
 export const Auth = () => {
@@ -16,7 +16,7 @@ export const Auth = () => {
 
   const [auth, isLoading] = useAuth(authData, type);
 
-  const handleSubmit = (e) => {
+  const submitForm = (e) => {
     e.preventDefault();
     if (!authData.password && !authData.email) return;
     auth();
@@ -24,7 +24,7 @@ export const Auth = () => {
 
   return (
     <AuthForm
-      handleSubmit={handleSubmit}
+      onSubmit={submitForm}
       type={type}
       isLogin={isLogin}
       setIsLogin={setIsLogin}

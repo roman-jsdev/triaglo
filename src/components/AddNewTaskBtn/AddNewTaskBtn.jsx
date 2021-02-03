@@ -1,38 +1,31 @@
 import { useState } from "react";
-import { useDndState } from "../../store/DndContext/DndContext";
+import { useBoardState } from "../../store/BoardContext/BoardContext";
 import { Input, ButtonsWrapper, AddButton } from "../AddNewTaskBtn/Styled";
 
 export const AddNewTaskBtn = () => {
-  const [value, setValue] = useState("");
-  const { addNewTask } = useDndState();
+  const [inputValue, setInputValue] = useState("");
+  const { addNewTask } = useBoardState();
 
-  const onAdd = (e) => {
-    if (!value) return;
-    const selector = "[data-rbd-draggable-id]";
-    const columnId = e.target.closest(selector).dataset.rbdDraggableId;
-    addNewTask(columnId, value);
-    setValue("");
+  const addTask = ({ target }) => {
+    if (!inputValue) return;
+    const {dataset: {rbdDraggableId}} = target.closest("[data-rbd-draggable-id]");
+    addNewTask(rbdDraggableId, inputValue);
+    setInputValue("");
   };
 
-  const onEnterPress = (event) => {
-    if (event.key !== "Enter") {
-      return;
-    }
-    if (value) {
-      onAdd(event);
-    } else {
-      return;
-    }
+  const addTaskOnEnterPress = (event) => {
+    if (event.key !== "Enter" || !inputValue) return;
+    addTask(event);
   };
 
   return (
-    <ButtonsWrapper onKeyPress={onEnterPress}>
+    <ButtonsWrapper onKeyPress={addTaskOnEnterPress}>
       <Input
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
+        value={inputValue}
+        onChange={({  target  }) => setInputValue(target.value)}
         placeholder="Enter title of new task..."
       />
-      <AddButton onClick={onAdd}>Add task</AddButton>
+      <AddButton onClick={addTask}>Add task</AddButton>
     </ButtonsWrapper>
   );
 };

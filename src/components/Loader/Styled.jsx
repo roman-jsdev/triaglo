@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const LoaderWrapper = styled.div`
+export const LoaderWrapper = styled.div`
   position: fixed;
   top: 0;
   right: 0;
@@ -16,11 +16,3 @@ const LoaderWrapper = styled.div`
     color: #ffffff;
   }
 `;
-
-export const Loader = () => {
-  return (
-    <LoaderWrapper>
-      <span>Loading...</span>
-    </LoaderWrapper>
-  );
-};

@@ -1,4 +1,7 @@
 :root {
+  --main-light-color: #ffffff;
+  --main-light-transparent-background: hsla(0, 0%, 100%, 0.24);
+  --main-light-transparent-background-hover: hsla(0, 0%, 98%, 0.34);
   --column-primary-background: #f7f7f7;
   --column-primary-dragged-background: #e9e8e8;
   --column-secondary-background: #ebecf0;
@@ -26,10 +29,6 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
-}
-
-.active-wrapper {
-  background-color: var(--column-secondary-background)!important;
 }
 
 .nav-link {

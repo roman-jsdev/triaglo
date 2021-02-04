@@ -1,67 +1,59 @@
 import { useCallback, useReducer } from "react";
 import { useDB } from "../../hooks/useDB";
-import { initialUserState } from "../../initialData";
+import { storage } from "../../utils";
 import {
-  ADD_BOARD_TO_USER,
-  FETCH_INITIAL_USER_STATE,
-  REMOVE_BOARD_FROM_USER,
-  SET_INITIAL_USER_STATE,
-  SET_USER_STATE_LOADING,
-} from "../types";
+  addBoardToUserAction,
+  fetchInitialUserStateAction,
+  removeBoardFromUserAction,
+  setInitialUserStateAction,
+  setUserStateLoadingAction,
+} from "./userActions";
 import { UserContext } from "./UserContext";
 import { userReducer } from "./userReducer";
 
 export const UserState = ({ children }) => {
+  const { userId, email } = storage() || { userId: null, email: null };
+  const initialUserState = {
+    userId,
+    email,
+    isLoading: true,
+    boards: {},
+  };
+
   const [userState, dispatch] = useReducer(userReducer, initialUserState);
 
   const [initDB] = useDB("put", "asyncPath");
 
-  const addBoardToUser = (board) => {
-    const payload = { ...userState.boards, ...board };
-    dispatch({ type: ADD_BOARD_TO_USER, payload });
-  };
+  const addBoardToUser = (board) =>
+    dispatch(addBoardToUserAction(userState, board));
 
-  const removeBoardFromUser = (id) => {
-    const payload = Object.keys(userState.boards)
-      .filter((key) => key !== id)
-      .reduce((obj, key) => {
-        return {
-          ...obj,
-          [key]: userState.boards[key],
-        };
-      }, {});
-    dispatch({ type: REMOVE_BOARD_FROM_USER, payload });
-  };
+  const removeBoardFromUser = (boardId) =>
+    dispatch(removeBoardFromUserAction(userState, boardId));
 
-  const setInitialUserState = useCallback(() => {
-    dispatch({ type: SET_INITIAL_USER_STATE, payload: initialUserState });
-  }, []);
+  const setInitialUserState = useCallback(
+    () => dispatch(setInitialUserStateAction(initialUserState)),
+    []
+  );
 
-  const setUserStateLoading = (type) => {
-    dispatch({ type: SET_USER_STATE_LOADING, payload: type });
-  };
+  const setUserStateLoading = (type) =>
+    dispatch(setUserStateLoadingAction(type));
 
   const initUserState = useCallback(
     (response) => {
+      const { userId: lazyUserId, email: lazyUserEmail } = storage();
       if (!response.userId) {
         initDB(
           {
             boards: response.boards,
-            userId: sessionStorage.getItem("userId"),
-            email: sessionStorage.getItem("email"),
+            userId: lazyUserId,
+            email: lazyUserEmail,
             isLoading: false,
           },
-          `users/${sessionStorage.getItem("userId")}`
+          `users/${lazyUserId}`
         );
       }
       const finalResponse = response.email ? response : {};
-      dispatch({
-        type: FETCH_INITIAL_USER_STATE,
-        payload: {
-          ...finalResponse,
-          isLoading: false,
-        },
-      });
+      dispatch(fetchInitialUserStateAction(finalResponse));
     },
     [initDB]
   );

@@ -6,19 +6,12 @@ export const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLogin, setIsLogin] = useState(true);
-
-  const authData = {
-    email,
-    password,
-  };
-
   const type = isLogin ? "login" : "register";
-
-  const [auth, isLoading] = useAuth(authData, type);
+  const [auth, isLoading] = useAuth({ email, password }, type);
 
   const submitForm = (e) => {
     e.preventDefault();
-    if (!authData.password && !authData.email) return;
+    if (!password && !email) return;
     auth();
   };
 

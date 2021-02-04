@@ -6,14 +6,15 @@ import { Loader } from "../Loader/Loader";
 import { BoardLink } from "../BoardLink/BoardLink";
 import { Wrapper, BoardsWrapper, SideBar } from "./Styled";
 import { useGetBoardsLinks } from "../../hooks/useGetBoardLinks";
+import { storage } from "../../utils";
 
 export const DashBoard = () => {
   const [mounted, setMounted] = useState(false);
   const { initUserState, addBoardToUser, setUserStateLoading } = useUserState();
-  const userId = sessionStorage.getItem("userId");
+  const { userId } = storage();
   const [fetchUser, isDBLoading, fetchedUserData] = useDB(
     "get",
-    `users/${sessionStorage.getItem("userId")}`
+    `users/${userId}`
   );
   const [getLinks] = useGetBoardsLinks(isDBLoading);
 

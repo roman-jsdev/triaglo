@@ -2,38 +2,39 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useAuthState } from "../store/AuthContext/AuthContext";
+import { storage } from "../utils";
 
 export const useAuth = (authData, type) => {
   const { login } = useAuthState();
   const history = useHistory();
   const [isLoading, setIsLoading] = useState(false);
 
-  const url =
-    type === "login"
-      ? `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.REACT_APP_API_KEY}`
-      : `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.REACT_APP_API_KEY}`;
+  const getUrl = (type) => {
+    const dynamicUrl = type === "login" ? "signInWithPassword" : "signUp";
+    return `https://identitytoolkit.googleapis.com/v1/accounts:${dynamicUrl}?key=${process.env.REACT_APP_API_KEY}`;
+  };
 
-  const tryLogin = async () => {
+  const auth = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.post(url, authData);
+      const {
+        data: { expiresIn, idToken, localId, email },
+      } = await axios.post(getUrl(type), authData);
 
-      const data = response.data;
       const expirationDate =
         type === "login"
           ? new Date(new Date().getTime() + 3600000)
-          : new Date(new Date().getTime() + data.expiresIn * 1000);
+          : new Date(new Date().getTime() + expiresIn * 1000);
 
-      sessionStorage.setItem("token", data.idToken);
-      sessionStorage.setItem("userId", data.localId);
-      sessionStorage.setItem("email", data.email);
-      sessionStorage.setItem("expirationDate", expirationDate);
+      storage({ token: idToken, userId: localId, email, expirationDate });
 
-      login(data.idToken, data.localId, data.email);
+      login(idToken, localId, email);
+
       history.push("/");
     } catch (e) {
       alert("Incorrect Login Data");
       console.log(e);
+      setIsLoading(false);
     }
   };
 
@@ -41,5 +42,5 @@ export const useAuth = (authData, type) => {
     return setIsLoading(false);
   }, []);
 
-  return [tryLogin, isLoading];
+  return [auth, isLoading];
 };

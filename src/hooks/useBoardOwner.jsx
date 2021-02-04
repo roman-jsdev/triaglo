@@ -3,10 +3,10 @@ import { useBoardState } from "../store/BoardContext/BoardContext";
 
 export const useBoardOwner = () => {
   const {
-    boardState: { owner },
+    boardState: { owner: boardOwner },
   } = useBoardState();
   const {
-    authState: { id },
+    authState: { id: userId },
   } = useAuthState();
-  return [owner === id];
+  return [boardOwner === userId];
 };

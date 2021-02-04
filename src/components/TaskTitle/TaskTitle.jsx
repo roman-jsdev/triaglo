@@ -3,6 +3,7 @@ import { Wrapper, Input } from "./Styled";
 import { useBoardState } from "../../store/BoardContext/BoardContext";
 
 export const TaskTitle = ({ task: { id: taskId, content }, isDragging }) => {
+  const [taskContent, setTaskContent] = useState(content);
   const { setTaskTitle } = useBoardState();
   const titleRef = useRef();
   const wrapperRef = useRef();
@@ -10,15 +11,18 @@ export const TaskTitle = ({ task: { id: taskId, content }, isDragging }) => {
   const changeTask = ({ target: { value } }) => {
     wrapperRef.current.style.height = "26px";
     titleRef.current.style.height = "18px";
-    setTaskTitle(taskId, value);
+    setTaskContent(value);
     titleRef.current.style.height = titleRef.current.scrollHeight + "px";
     wrapperRef.current.style.height = titleRef.current.scrollHeight + "px";
+  };
+
+  const setTaskToState = () => {
+    setTaskTitle(taskId, taskContent);
   };
 
   const changeTaskOnEnterPress = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      changeTask(e);
       titleRef.current.blur();
       titleRef.current.style.pointerEvents = "none";
     }
@@ -52,7 +56,8 @@ export const TaskTitle = ({ task: { id: taskId, content }, isDragging }) => {
         isDragging={isDragging}
         ref={titleRef}
         onKeyPress={changeTaskOnEnterPress}
-        value={content}
+        onBlur={setTaskToState}
+        value={taskContent}
         onChange={changeTask}
       />
     </Wrapper>

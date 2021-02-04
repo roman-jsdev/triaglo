@@ -1,22 +1,29 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useBoardState } from "../../store/BoardContext/BoardContext";
 import { RemoveColumnBtn } from "../RemoveColumnBtn/RemoveColumnBtn";
 import { Title, Input } from "./Styled";
 
-export const ColumnTitle = ({ providedProps, column: { id, title } }) => {
+export const ColumnTitle = ({
+  providedProps,
+  column: { id: columnId, title },
+}) => {
+  const [columnTitleContent, setColumnTitleContent] = useState(title);
   const { setColumnTitle } = useBoardState();
   const titleRef = useRef();
 
   const changeTitle = ({ target: { value } }) => {
-    setColumnTitle(id, value);
+    setColumnTitleContent(value);;
     titleRef.current.style.height = "20px";
     titleRef.current.style.height = titleRef.current.scrollHeight + "px";
+  };
+
+  const setColumnToState = () => {
+    setColumnTitle(columnId, columnTitleContent);
   };
 
   const changeTitleOnEnterPress = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      changeTitle(e);
       titleRef.current.blur();
       titleRef.current.style.pointerEvents = "none";
     }
@@ -49,7 +56,8 @@ export const ColumnTitle = ({ providedProps, column: { id, title } }) => {
         ref={titleRef}
         onChange={changeTitle}
         onKeyPress={changeTitleOnEnterPress}
-        value={title}
+        value={columnTitleContent}
+        onBlur={setColumnToState}
       />
       <RemoveColumnBtn />
     </Title>

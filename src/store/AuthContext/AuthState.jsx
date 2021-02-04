@@ -1,33 +1,27 @@
 import { useCallback, useReducer } from "react";
+import { storage } from "../../utils";
 import { AUTH_LOGOUT, AUTH_SUCCESS } from "../types";
 import { useUserState } from "../UserContext/UserContext";
 import { AuthContext } from "./AuthContext";
 import { authReducer } from "./authReducer";
 
-const initialState = { token: null, id: null, email: null };
-
 export const AuthState = ({ children }) => {
-  const [authState, dispatch] = useReducer(authReducer, initialState);
+  const [authState, dispatch] = useReducer(authReducer, {
+    token: null,
+    id: null,
+    email: null,
+  });
   const { setInitialUserState } = useUserState();
 
   const logout = useCallback(() => {
-    sessionStorage.removeItem("token");
-    sessionStorage.removeItem("userId");
-    sessionStorage.removeItem("email");
-    sessionStorage.removeItem("expirationDate");
-    localStorage.clear();
     dispatch({ type: AUTH_LOGOUT });
-    setInitialUserState()
+    setInitialUserState();
+    localStorage.clear();
   }, [setInitialUserState]);
 
   const login = useCallback(
     (token, id, email) => {
-      const payload = {
-        token,
-        id,
-        email,
-      };
-      dispatch({ type: AUTH_SUCCESS, payload });
+      dispatch({ type: AUTH_SUCCESS, payload: { token, id, email } });
       return setTimeout(() => {
         logout();
       }, 3600000);
@@ -36,19 +30,11 @@ export const AuthState = ({ children }) => {
   );
 
   const autoLogin = useCallback(() => {
-    const token = sessionStorage.getItem("token");
-    const id = sessionStorage.getItem("userId");
-    const email = sessionStorage.getItem("email");
-    if (!token) {
-      return logout();
-    } else {
-      const expirationDate = new Date(sessionStorage.getItem("expirationDate"));
-      if (expirationDate <= new Date()) {
-        return logout();
-      } else {
-        return login(token, id, email);
-      }
-    }
+    if (!storage()) return logout();
+    const { token, userId, email, expirationDate } = storage();
+    return new Date(expirationDate) <= new Date()
+      ? logout()
+      : login(token, userId, email);
   }, [login, logout]);
 
   return (

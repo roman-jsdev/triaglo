@@ -2,11 +2,13 @@ import { Link } from "react-router-dom";
 import { useBoardId } from "../../hooks/useBoardId";
 import { useDB } from "../../hooks/useDB";
 import { useUserState } from "../../store/UserContext/UserContext";
+import { storage } from "../../utils";
 import { Wrapper, DeleteBtn } from "./Styled";
 
 export const BoardLink = ({ to, type, title, id, onClick }) => {
   const [boardId] = useBoardId(title);
-  const currentUserId = sessionStorage.getItem("userId");
+  const { userId } = storage();
+  const currentUserId = userId;
 
   const {
     userState: { boards },

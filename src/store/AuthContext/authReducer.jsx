@@ -1,11 +1,11 @@
 import { AUTH_SUCCESS, AUTH_LOGOUT } from "../types";
 
-const handlers = {
-  [AUTH_SUCCESS]: (state, { payload }) => ({
+const cases = {
+  [AUTH_SUCCESS]: (state, { payload: {  token, id, email  } }) => ({
     ...state,
-    token: payload.token,
-    id: payload.id,
-    email: payload.email,
+    token,
+    id,
+    email,
   }),
   [AUTH_LOGOUT]: (state) => ({
     ...state,
@@ -17,6 +17,6 @@ const handlers = {
 };
 
 export const authReducer = (state, action) => {
-  const handler = handlers[action.type] || handlers.DEFAULT;
-  return handler(state, action);
+  const reducer = cases[action.type] || cases.DEFAULT;
+  return reducer(state, action);
 };

@@ -6,14 +6,14 @@ import {
   SET_USER_STATE_LOADING,
 } from "../types";
 
-const handlers = {
-  [ADD_BOARD_TO_USER]: (state, { payload }) => ({
+const cases = {
+  [ADD_BOARD_TO_USER]: (state, { payload: boards }) => ({
     ...state,
-    boards: payload,
+    boards,
   }),
-  [REMOVE_BOARD_FROM_USER]: (state, { payload }) => ({
+  [REMOVE_BOARD_FROM_USER]: (state, { payload: boards }) => ({
     ...state,
-    boards: payload,
+    boards,
   }),
   [FETCH_INITIAL_USER_STATE]: (state, { payload }) => ({
     ...state,
@@ -22,14 +22,14 @@ const handlers = {
   [SET_INITIAL_USER_STATE]: ({ payload }) => ({
     ...payload,
   }),
-  [SET_USER_STATE_LOADING]: (state, { payload }) => ({
+  [SET_USER_STATE_LOADING]: (state, { payload: isLoading }) => ({
     ...state,
-    isLoading: payload,
+    isLoading,
   }),
   DEFAULT: (state) => state,
 };
 
 export const userReducer = (state, action) => {
-  const handler = handlers[action.type] || handlers.DEFAULT;
-  return handler(state, action);
+  const reducer = cases[action.type] || cases.DEFAULT;
+  return reducer(state, action);
 };

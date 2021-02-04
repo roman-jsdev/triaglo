@@ -3,16 +3,16 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import { Logout } from "./components/Logout";
 import { NavBar } from "./components/NavBar/NavBar";
 import { Auth } from "./pages/Auth";
-import { Board } from "./pages/Board";
+import { Board } from "./pages/Board/Board";
 import { Home } from "./pages/Home";
 import { useAuthState } from "./store/AuthContext/AuthContext";
 import { BoardState } from "./store/BoardContext/BoardState";
 
 export const App = () => {
-  const { authState } = useAuthState();
-  const { autoLogin } = useAuthState();
-
-  const isLoggedIn = authState.token;
+  const {
+    authState: { token: isLoggedIn },
+    autoLogin,
+  } = useAuthState();
 
   useEffect(() => {
     autoLogin();

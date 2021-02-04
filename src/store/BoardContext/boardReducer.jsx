@@ -13,64 +13,67 @@ import {
   FETCH_INITIAL_STATE,
 } from "../types";
 
-const handlers = {
-  [SET_COLUMN_ORDER]: (state, { payload }) => ({
-    ...state,
-    columnOrder: payload,
-  }),
-  [SET_NEW_SAME_COLUMN]: (state, { payload }) => ({
-    ...state,
-    columns: payload,
-  }),
-  [SET_NEW_COLUMN]: (state, { payload }) => ({
-    ...state,
-    columns: payload,
-  }),
-  [ADD_NEW_COLUMN]: (state, { payload }) => ({
-    ...state,
-    columns: payload.columns,
-    columnOrder: payload.order,
-  }),
-  [REMOVE_COLUMN]: (state, { payload }) => ({
-    ...state,
-    tasks: payload.tasks,
-    columns: payload.columns,
-    columnOrder: payload.order,
-  }),
-  [ADD_NEW_TASK]: (state, { payload }) => ({
-    ...state,
-    tasks: payload.tasks,
-    columns: payload.columns,
-  }),
-  [REMOVE_TASK]: (state, { payload }) => ({
-    ...state,
-    tasks: payload.tasks,
-    columns: payload.columns,
-  }),
-  [SET_COLUMN_TITLE]: (state, { payload }) => ({
-    ...state,
-    columns: payload,
-  }),
-  [SET_TASK_TITLE]: (state, { payload }) => ({
-    ...state,
-    tasks: payload,
-  }),
-  [ADD_USER_TO_BOARD]: (state, { payload }) => ({
-    ...state,
-    invited: payload,
-  }),
-  [REMOVE_USER_FROM_BOARD]: (state, { payload }) => ({
-    ...state,
-    invited: payload,
-  }),
+const cases = {
   [FETCH_INITIAL_STATE]: (state, { payload }) => ({
     ...state,
     ...payload,
+  }),
+  [SET_COLUMN_ORDER]: (state, { payload: columnOrder }) => ({
+    ...state,
+    columnOrder,
+  }),
+  [SET_NEW_SAME_COLUMN]: (state, { payload: columns }) => ({
+    ...state,
+    columns,
+  }),
+  [SET_NEW_COLUMN]: (state, { payload: columns }) => ({
+    ...state,
+    columns,
+  }),
+  [ADD_NEW_COLUMN]: (state, { payload: { columns, order: columnOrder } }) => ({
+    ...state,
+    columns,
+    columnOrder,
+  }),
+  [REMOVE_COLUMN]: (
+    state,
+    { payload: { tasks, columns, order: columnOrder } }
+  ) => ({
+    ...state,
+    tasks,
+    columns,
+    columnOrder,
+  }),
+  [ADD_NEW_TASK]: (state, { payload: { tasks, columns } }) => ({
+    ...state,
+    tasks,
+    columns,
+  }),
+  [REMOVE_TASK]: (state, { payload: { tasks, columns } }) => ({
+    ...state,
+    tasks,
+    columns,
+  }),
+  [SET_COLUMN_TITLE]: (state, { payload: columns }) => ({
+    ...state,
+    columns,
+  }),
+  [SET_TASK_TITLE]: (state, { payload: tasks }) => ({
+    ...state,
+    tasks,
+  }),
+  [ADD_USER_TO_BOARD]: (state, { payload: invited }) => ({
+    ...state,
+    invited,
+  }),
+  [REMOVE_USER_FROM_BOARD]: (state, { payload: invited }) => ({
+    ...state,
+    invited,
   }),
   DEFAULT: (state) => state,
 };
 
 export const boardReducer = (state, action) => {
-  const handler = handlers[action.type] || handlers.DEFAULT;
-  return handler(state, action);
+  const reducer = cases[action.type] || cases.DEFAULT;
+  return reducer(state, action);
 };

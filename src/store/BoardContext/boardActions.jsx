@@ -9,6 +9,7 @@ import {
   REMOVE_USER_FROM_BOARD,
   SET_COLUMN_ORDER,
   SET_COLUMN_TITLE,
+  SET_NEW_BOARD_TITLE,
   SET_NEW_COLUMN,
   SET_NEW_SAME_COLUMN,
   SET_TASK_TITLE,
@@ -199,4 +200,9 @@ export const addUserToBoardAction = ({ invited }, email) => ({
 export const removeUserFromBoardAction = ({ invited }, email) => ({
   type: REMOVE_USER_FROM_BOARD,
   payload: [...invited].filter((user) => user !== email),
+});
+
+export const setNewBoardTitleAction = (title) => ({
+  type: SET_NEW_BOARD_TITLE,
+  payload: title,
 });

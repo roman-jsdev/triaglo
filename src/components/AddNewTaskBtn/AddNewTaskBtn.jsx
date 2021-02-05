@@ -8,7 +8,9 @@ export const AddNewTaskBtn = () => {
 
   const addTask = ({ target }) => {
     if (!inputValue) return;
-    const {dataset: {rbdDraggableId}} = target.closest("[data-rbd-draggable-id]");
+    const {
+      dataset: { rbdDraggableId },
+    } = target.closest("[data-rbd-draggable-id]");
     addNewTask(rbdDraggableId, inputValue);
     setInputValue("");
   };
@@ -22,7 +24,7 @@ export const AddNewTaskBtn = () => {
     <ButtonsWrapper onKeyPress={addTaskOnEnterPress}>
       <Input
         value={inputValue}
-        onChange={({  target  }) => setInputValue(target.value)}
+        onChange={({ target: { value } }) => setInputValue(value)}
         placeholder="Enter title of new task..."
       />
       <AddButton onClick={addTask}>Add task</AddButton>

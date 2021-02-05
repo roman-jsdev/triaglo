@@ -9,7 +9,5 @@ export const useAccessBoard = () => {
     authState: { id, email, token },
   } = useAuthState();
 
-  return [
-    (!!(owner === id) && !!token) || (invited.includes(email) && !!token),
-  ];
+  return [(owner === id && !!token) || (invited.includes(email) && !!token)];
 };

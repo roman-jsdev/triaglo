@@ -6,19 +6,23 @@ export const Container = styled.div`
   border-radius: var(--main-border-radius);
   width: 300px;
   min-width: 300px;
-  height: max-content;
   display: flex;
+  height: max-content;
   flex-direction: column;
+  max-height: calc(85vh - 16px);
+
+  @media screen and (max-width: 576px) {
+    max-height: calc(82vh - 16px);
+  }
 `;
 
 export const TaskList = styled.div`
-  padding: ${({ isEmpty }) => (!isEmpty ? 0 : "8px")};
+  padding: ${({ isEmpty }) => (!isEmpty ? '2px' : "8px")};
   transition: background-color 0.15s ease;
   background-color: ${({ isDraggingOver }) =>
     isDraggingOver
       ? "var(--column-primary-dragged-background)"
       : "var(--column-primary-background)"};
   flex-grow: 1;
-  max-height: 75vh;
   overflow-y: auto;
 `;

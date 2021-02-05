@@ -5,4 +5,3 @@ export const useBoardId = (id) => {
   const boardInitialId = id ? id : pathname;
   return [boardInitialId.split("/").join("")];
 };
-;

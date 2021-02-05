@@ -11,43 +11,38 @@ export const useDB = (method, path, data) => {
 
   const fetchDB = useCallback(
     async (asyncData, asyncPath) => {
-      switch (method) {
-        case "put":
-          try {
-            const responseFromDB = await axios.put(
+      let responseFromDB = null;
+      try {
+        switch (method) {
+          case "put":
+            responseFromDB = await axios.put(
               asyncPath ? getURL(asyncPath) : getURL(path),
               asyncData || data
             );
-            setResponse(modifyResponse(responseFromDB));
-            setIsLoading(false);
-          } catch (e) {
-            alert(e);
-          }
-          break;
-        case "get":
-          try {
-            const responseFromDB = await axios.get(
+            break;
+          case "patch":
+            responseFromDB = await axios.patch(
+              asyncPath ? getURL(asyncPath) : getURL(path),
+              asyncData || data
+            );
+            break;
+          case "get":
+            responseFromDB = await axios.get(
               asyncPath ? getURL(asyncPath) : getURL(path)
             );
-            setResponse(modifyResponse(responseFromDB));
-            setIsLoading(false);
-          } catch (e) {
-            alert(e);
-          }
-          break;
-        case "delete":
-          try {
-            const responseFromDB = await axios.delete(
+            break;
+          case "delete":
+            responseFromDB = await axios.delete(
               asyncPath ? getURL(asyncPath) : getURL(path)
             );
-            setResponse(modifyResponse(responseFromDB));
-            setIsLoading(false);
-          } catch (e) {
-            alert(e);
-          }
-          break;
-        default:
-          console.warn("Some problems with HTTP methods");
+            break;
+          default:
+            responseFromDB = null;
+        }
+        setResponse(modifyResponse(responseFromDB));
+        setIsLoading(false);
+      } catch (e) {
+        alert(e);
       }
     },
     [path, method, data]

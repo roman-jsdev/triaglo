@@ -57,7 +57,7 @@ export const AddNewColumn = () => {
           value={inputValue}
           ref={inputRef}
           placeholder={"Enter title of new list..."}
-          onChange={(e) => setInputValue(e.target.value)}
+          onChange={({ target: { value } }) => setInputValue(value)}
         />
         <Buttons>
           <AddButton onClick={addColumn}>Add List</AddButton>

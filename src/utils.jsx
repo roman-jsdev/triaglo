@@ -1,16 +1,22 @@
+import {
+  firstDashboardSection,
+  secondDashboardSection,
+  thirdDashboardSection,
+} from "./constants";
+
 export const validateEmail = (email) => [
   /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i.test(
     email
   ),
 ];
 
-export const storage = (data) => {
-  if (!data) return JSON.parse(localStorage.getItem("localUser"));
-  localStorage.setItem("localUser", JSON.stringify(data));
-};
+export const storage = (data) =>
+  !data
+    ? JSON.parse(localStorage.getItem("localUser"))
+    : localStorage.setItem("localUser", JSON.stringify(data));
 
-export const objectFilter = (object, callback) => {
-  return Object.keys(object)
+export const objectFilter = (object, callback) =>
+  Object.keys(object)
     .filter(callback)
     .reduce((obj, key) => {
       return {
@@ -18,7 +24,6 @@ export const objectFilter = (object, callback) => {
         [key]: object[key],
       };
     }, {});
-};
 
 export const modifyResponse = ({ data }) => {
   const { userId } = storage() || { userId: null };
@@ -44,4 +49,19 @@ export const modifyResponse = ({ data }) => {
   });
 
   return data;
+};
+
+export const getBoardsSections = (tabId) =>
+  tabId === 0
+    ? [firstDashboardSection, secondDashboardSection, thirdDashboardSection]
+    : tabId === 1
+    ? [secondDashboardSection]
+    : [thirdDashboardSection];
+
+export const setActiveClassName = (
+  { current: { childNodes } },
+  { classList: activeClassList }
+) => {
+  childNodes.forEach(({ classList }) => classList.remove("active"));
+  activeClassList.add("active");
 };

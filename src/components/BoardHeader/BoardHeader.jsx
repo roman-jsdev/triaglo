@@ -1,8 +1,11 @@
 import { useRef, useState } from "react";
+import { useBoardId } from "../../hooks/useBoardId";
 import { useBoardOwner } from "../../hooks/useBoardOwner";
+import { useDB } from "../../hooks/useDB";
 import { useOutsideClick } from "../../hooks/useOutsideClick";
 import { useBoardState } from "../../store/BoardContext/BoardContext";
-import { validateEmail } from "../../utils";
+import { useUserState } from "../../store/UserContext/UserContext";
+import { storage, validateEmail } from "../../utils";
 import {
   Button,
   ClosePopup,
@@ -15,21 +18,42 @@ import {
   InvitedElementWrapper,
   InvitedElementName,
   InvitedElementDelete,
+  TitleInput,
 } from "./Styled";
 
 export const BoardHeader = () => {
   const [email, setEmail] = useState("");
   const {
-    boardState: { invited },
+    boardState: { invited, title: stateTitle },
     addUserToBoard,
     removeUserFromBoard,
+    setNewBoardTitle,
   } = useBoardState();
+  const [title, setTitle] = useState(stateTitle);
+  const [boardId] = useBoardId();
   const [isOwner] = useBoardOwner();
   const popupRef = useRef();
+  const titleRef = useRef();
+  const {
+    userState: { userId, boards },
+  } = useUserState();
+  const [setUserBoardTitle] = useDB("patch", `users/${userId}/boards/${boardId}`);
 
-  const openPopup = () => {
-    popupRef.current.classList.add("opened");
+  const onTitleFocus = () => titleRef.current.select();
+
+  const setTitleToState = () => {
+    setNewBoardTitle(title);
+    setUserBoardTitle({ title });
   };
+
+  const changeTitleOnEnterPress = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      titleRef.current.blur();
+    }
+  };
+
+  const openPopup = () => popupRef.current.classList.add("opened");
 
   const closePopup = () => {
     popupRef.current.classList.remove("opened");
@@ -40,7 +64,7 @@ export const BoardHeader = () => {
 
   const addUser = () => {
     if (invited.includes(email)) {
-      alert("User already invited");
+      alert("User is already invited");
       setEmail("");
       return;
     }
@@ -68,6 +92,15 @@ export const BoardHeader = () => {
 
   return (
     <Wrapper>
+      <TitleInput
+        ref={titleRef}
+        value={title}
+        onChange={({ target: { value } }) => setTitle(value)}
+        onFocus={onTitleFocus}
+        onBlur={setTitleToState}
+        onKeyPress={changeTitleOnEnterPress}
+        maxLength={20}
+      />
       <Button onClick={openPopup}>Invite</Button>
       <PopupInvite ref={popupRef}>
         <PopupHeader>
@@ -84,10 +117,12 @@ export const BoardHeader = () => {
               type="email"
               placeholder="Enter email..."
               value={email}
-              onChange={({ target }) => setEmail(target.value)}
+              onChange={({ target: { value } }) => setEmail(value)}
               onKeyPress={addUserOnEnterPress}
             />
-            <InviteBtn onClick={addUser}>Send Invite</InviteBtn>
+            <InviteBtn onClick={addUser} isInvited={!!invited.length}>
+              Send invite
+            </InviteBtn>
           </>
         )}
         {!!invited.length && (

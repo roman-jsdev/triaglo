@@ -4,7 +4,12 @@ export const Container = styled.div`
   display: flex;
   width: 100%;
   overflow-x: auto;
-  height: 90vh;
+  overflow-y: hidden;
+  height: 87vh;
+
+  @media screen and (max-width: 576px) {
+    height: 82vh;
+  }
 `;
 
 export const NoAccess = styled.div`

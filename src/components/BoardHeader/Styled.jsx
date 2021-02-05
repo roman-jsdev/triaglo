@@ -4,27 +4,52 @@ import { AddButton } from "../AddNewTaskBtn/Styled";
 export const Wrapper = styled.div`
   width: 100%;
   height: 5vh;
-  padding: 5px;
+  padding: 8px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   position: relative;
+  align-items: center;
+  margin-bottom: 3vh;
 `;
 
 export const Button = styled.div`
   background-color: hsla(0, 0%, 100%, 0.32);
-  padding: 3px 15px 0;
   border-radius: var(--main-border-radius);
   color: white;
+  padding: 5px 25px;
   cursor: pointer;
   user-select: none;
   transition: all 0.3s;
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 500;
   position: relative;
   z-index: 4;
+  margin-right: 10px;
 
   &:hover {
     background-color: hsla(0, 0%, 100%, 0.55);
+  }
+`;
+
+export const TitleInput = styled.input`
+  background-color: hsla(0, 0%, 100%, 0.32);
+  border-radius: var(--main-border-radius);
+  color: white;
+  font-family: var(--main-font-family);
+  padding: 6px 0px;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.3s;
+  font-size: 16px;
+  font-weight: 500;
+  border: none;
+  margin-right: 15px;
+  text-align: center;
+
+  &:focus {
+    background-color: var(--main-light-color);
+    color: var(--main-dark-color);
+    cursor: text;
   }
 `;
 
@@ -34,32 +59,17 @@ export const PopupInvite = styled.div`
   top: 5vh;
   height: max-content;
   width: 350px;
-  background-color: var(--column-primary-background);
+  background-color: var(--main-light-color);
   display: none;
   z-index: 5;
   justify-content: flex-start;
   align-items: center;
   flex-direction: column;
   padding: 15px;
+  box-shadow: 0 0 20px 1px rgb(0 0 0 / 32%);
 
   &.opened {
     display: flex;
-  }
-`;
-
-export const Overlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 100vh;
-  background-color: transparent;
-  z-index: 3;
-  display: none;
-
-  &.opened {
-    display: block;
   }
 `;
 
@@ -100,7 +110,7 @@ export const Input = styled.input`
 
 export const InviteBtn = styled(AddButton)`
   align-self: flex-end;
-  margin-bottom: 15px;
+  margin-bottom: ${({ isInvited }) => (isInvited ? "15px" : 0)};
 `;
 
 export const InvitedListHeader = styled(PopupHeader)`

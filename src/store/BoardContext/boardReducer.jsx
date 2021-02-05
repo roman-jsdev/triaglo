@@ -11,6 +11,7 @@ import {
   ADD_USER_TO_BOARD,
   REMOVE_USER_FROM_BOARD,
   FETCH_INITIAL_STATE,
+  SET_NEW_BOARD_TITLE,
 } from "../types";
 
 const cases = {
@@ -69,6 +70,10 @@ const cases = {
   [REMOVE_USER_FROM_BOARD]: (state, { payload: invited }) => ({
     ...state,
     invited,
+  }),
+  [SET_NEW_BOARD_TITLE]: (state, { payload: title }) => ({
+    ...state,
+    title,
   }),
   DEFAULT: (state) => state,
 };

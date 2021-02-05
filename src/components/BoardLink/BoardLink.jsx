@@ -5,8 +5,7 @@ import { useUserState } from "../../store/UserContext/UserContext";
 import { storage } from "../../utils";
 import { Wrapper, DeleteBtn } from "./Styled";
 
-export const BoardLink = ({ to, type, title, id, onClick }) => {
-  const [boardId] = useBoardId(title);
+export const BoardLink = ({ to, type, title, id, onClick, boardId }) => {
   const { userId } = storage();
   const currentUserId = userId;
 
@@ -23,7 +22,7 @@ export const BoardLink = ({ to, type, title, id, onClick }) => {
   const [deleteFromBoardDB] = useDB("delete", `boards/${boardId}`);
 
   const deleteBoard = () => {
-    if (boards[boardId].board === "owner") {
+    if (boards[boardId].owner === "owner") {
       removeBoardFromUser(boardId);
       deleteFromUserDB();
       deleteFromBoardDB();

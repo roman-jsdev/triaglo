@@ -1,26 +1,36 @@
-import { useCallback, useMemo } from "react";
 import { useUserState } from "../store/UserContext/UserContext";
 
-export const useGetBoardsLinks = (isDBLoading) => {
+export const useGetBoardsLinks = (isDBLoading, type) => {
   const {
     userState: { boards },
   } = useUserState();
 
-  const currentBoards = useMemo(() => boards || {}, [boards]);
-
-  const getLinks = useCallback(() => {
+  const getLinks = () => {
     if (!isDBLoading) {
-      const boards = [...Object.keys(currentBoards)] || [];
-      const links = [
-        ...boards.map((board) => {
-          const splitStr = board.split(/(\d+)/);
-          return { to: `/${splitStr[0]}/${splitStr[1]}`, title: board };
-        }),
-        { to: "/", type: "new", title: "+ Add New Board" },
-      ];
-      return links;
+      const links = Object.keys(boards || {}).map((board) => {
+        const splitStr = board.split(/(\d+)/);
+        return {
+          to: `/${splitStr[0]}/${splitStr[1]}`,
+          title: boards[board].title,
+          owner: boards[board].owner,
+          board,
+        };
+      });
+      switch (type) {
+        case "personal":
+          return [
+            ...links.reverse().filter(({ owner }) => owner === "owner"),
+            { to: "/", type: "new", title: "+ Add New Board" },
+          ];
+        case "recent":
+          return links.slice(-4).reverse();
+        case "invited":
+          return links.filter(({ owner }) => owner !== "owner");
+        default:
+          return links;
+      }
     }
-  }, [isDBLoading, currentBoards]);
+  };
 
   return [getLinks];
 };

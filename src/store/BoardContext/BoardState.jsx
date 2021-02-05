@@ -15,6 +15,7 @@ import {
   removeUserFromBoardAction,
   setColumnOrderAction,
   setColumnTitleAction,
+  setNewBoardTitleAction,
   setNewColumnAction,
   setNewSameColumnAction,
   setTaskTitleAction,
@@ -28,11 +29,12 @@ export const BoardState = ({ children }) => {
   const [boardState, dispatch] = useReducer(boardReducer, {
     owner: userId,
     isLoading: true,
+    title: boardId,
   });
 
   const [getDB, isLoading, response] = useDB("get", `boards/${boardId}`);
   const [putToUserDB] = useDB("put", `users/${userId}/boards/${boardId}`, {
-    board: "notOwner",
+    owner: "notOwner",
   });
   const [putToBoardDB] = useDB("put", `boards/${boardId}`, boardState);
 
@@ -48,7 +50,7 @@ export const BoardState = ({ children }) => {
         response.invited.includes(email) &&
         response.owner !== userId
       ) {
-        addBoardToUser({ board: "notOwner" });
+        addBoardToUser({ owner: "notOwner" });
         putToUserDB();
       }
 
@@ -107,6 +109,8 @@ export const BoardState = ({ children }) => {
   const removeUserFromBoard = (email) =>
     dispatch(removeUserFromBoardAction(boardState, email));
 
+  const setNewBoardTitle = (title) => dispatch(setNewBoardTitleAction(title));
+
   return (
     <BoardContext.Provider
       value={{
@@ -123,6 +127,7 @@ export const BoardState = ({ children }) => {
         addUserToBoard,
         removeUserFromBoard,
         fetchInitialState,
+        setNewBoardTitle,
       }}
     >
       {children}

@@ -4,14 +4,37 @@ export const Nav = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #8080dd;
-  color: white;
+  background-color: ${({ isLoggedIn }) =>
+    isLoggedIn ? "var(--main-light-background)" : "var(--main-light-color)"};
+  color: var(--main-dark-color);
   padding: 10px;
-  height: 5vh;
+  height: ${({ isLoggedIn }) => (isLoggedIn ? "5vh" : "7vh")};
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 2rem;
+
+  @media screen and (max-width: 576px) {
+    height: 10vh;
+  }
+
+  @media screen and (min-width: 1024px) {
+    max-width: ${({ isLoggedIn }) => (isLoggedIn ? "100%" : "1024px")};
+    padding: 0 1rem;
+  }
 `;
 
 export const Brand = styled.div`
-  font-size: 24px;
+  & a {
+    display: flex;
+    align-items: center;
+    &:focus {
+      outline: none;
+    }
+
+    & svg {
+      height: 25px;
+    }
+  }
 `;
 
 export const NavLinks = styled.ul`
@@ -28,4 +51,60 @@ export const NavLinkSingle = styled.li`
   margin: 0;
   margin-right: 5px;
   font-size: 24px;
+
+  & a {
+    color: ${({ isLoggedIn }) =>
+      isLoggedIn ? "var(--main-light-color)" : "var(--main-dark-color)"};
+    text-decoration: none;
+    outline: none;
+  }
+`;
+
+export const MobileMenuLink = styled.p`
+  color: var(--main-light-color);
+  font-weight: bold;
+  font-size: 22px;
+`;
+
+export const Backdrop = styled.div`
+  position: fixed;
+  z-index: 6;
+  width: 250px;
+  background-color: var(--main-light-color);
+  transform: translateX(-250px);
+  top: 0;
+  left: 0;
+  bottom: 0;
+  transition: all 0.3s ease-in;
+  display: flex;
+  justify-content: center;
+
+  & ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 25px;
+
+    & li {
+      margin-right: 0;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 15px;
+
+      & a {
+        color: var(--main-dark-color);
+      }
+    }
+  }
+`;
+
+export const Overlay = styled.div`
+  position: fixed;
+  z-index: 5;
+  background-color: rgb(0 0 0 / 41%);
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  display: none;
+  transition: all 0.3s ease-in;
 `;

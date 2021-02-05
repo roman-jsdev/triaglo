@@ -1,5 +1,5 @@
 import { DashBoard } from "../components/Dashboard/DashBoard";
-import { WelcomePage } from "../components/WelcomePage";
+import { WelcomePage } from "../components/WelcomePage/WelcomePage";
 import { useAuthState } from "../store/AuthContext/AuthContext";
 
 export const Home = () => {

@@ -22,6 +22,8 @@ export const Board = () => {
     if (isLoading) {
       fetchInitialState();
     }
+    document.body.style.backgroundColor = "var(--main-light-background)";
+    return () => (document.body.style.backgroundColor = "inherit");
   }, [fetchInitialState, isLoading]);
 
   return (
@@ -60,7 +62,12 @@ export const Board = () => {
               </DragDropContext>
             </>
           ) : (
-            <NoAccess>No Access To This Board</NoAccess>
+            <NoAccess
+              style={{ color: "var(--main-bark-color)" }}
+              onLoad={(document.body.style.backgroundColor = "inherit")}
+            >
+              No Access To This Board
+            </NoAccess>
           )}
         </>
       )}

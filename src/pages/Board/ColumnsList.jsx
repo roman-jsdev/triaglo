@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Column } from "../../components/Column/Column";
+import { Column } from "@components/Column/Column";
 
 export const ColumnsList = ({ column, taskMap, index }) => {
   const tasks = column.taskIds.map((taskId) => taskMap[taskId]);

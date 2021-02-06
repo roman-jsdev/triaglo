@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useBoardState } from "@store/BoardContext/BoardContext";
 import { Wrapper, Input } from "./Styled";
-import { useBoardState } from "../../store/BoardContext/BoardContext";
 
 export const TaskTitle = ({ task: { id: taskId, content }, isDragging }) => {
   const [taskContent, setTaskContent] = useState(content);

@@ -1,4 +1,4 @@
-import { AUTH_SUCCESS, AUTH_LOGOUT } from "../types";
+import { AUTH_SUCCESS, AUTH_LOGOUT } from "@store/types";
 
 const cases = {
   [AUTH_SUCCESS]: (state, { payload: {  token, id, email  } }) => ({

@@ -1,11 +1,11 @@
-import { objectFilter } from "../../utils";
+import { objectFilter } from "@src/utils";
 import {
   ADD_BOARD_TO_USER,
   FETCH_INITIAL_USER_STATE,
   REMOVE_BOARD_FROM_USER,
   SET_INITIAL_USER_STATE,
   SET_USER_STATE_LOADING,
-} from "../types";
+} from "@store/types";
 
 export const addBoardToUserAction = ({ boards }, board) => ({
   type: ADD_BOARD_TO_USER,

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useBoardState } from "../../store/BoardContext/BoardContext";
-import { RemoveColumnBtn } from "../RemoveColumnBtn/RemoveColumnBtn";
+import { useBoardState } from "@store/BoardContext/BoardContext";
+import { RemoveColumnBtn } from "@components/RemoveColumnBtn/RemoveColumnBtn";
 import { Title, Input } from "./Styled";
 
 export const ColumnTitle = ({

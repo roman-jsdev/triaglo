@@ -1,4 +1,4 @@
-import { useBoardState } from "../store/BoardContext/BoardContext";
+import { useBoardState } from "@store/BoardContext/BoardContext";
 
 export const useOnDragEnd = () => {
   const {

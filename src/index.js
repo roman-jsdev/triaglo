@@ -1,12 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import '@atlaskit/css-reset'
 import { App } from './App.jsx';
-import { AuthState } from './store/AuthContext/AuthState';
+import { AuthState } from '@store/AuthContext/AuthState';
+import { UserState } from '@store/UserContext/UserState';
 import { BrowserRouter } from "react-router-dom";
-import { UserState } from './store/UserContext/UserState';
-
+import '@atlaskit/css-reset'
 
 ReactDOM.render(
   <React.StrictMode>

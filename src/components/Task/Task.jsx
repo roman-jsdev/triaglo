@@ -1,7 +1,7 @@
-import { Draggable } from "react-beautiful-dnd";
-import { RemoveTaskBtn } from "../RemoveTaskBtn/RemoveTaskBtn";
-import { TaskTitle } from "../TaskTitle/TaskTitle";
+import { RemoveTaskBtn } from "@components/RemoveTaskBtn/RemoveTaskBtn";
+import { TaskTitle } from "@components/TaskTitle/TaskTitle";
 import { Container } from "./Styled";
+import { Draggable } from "react-beautiful-dnd";
 
 export const Task = ({ task, index }) => (
   <Draggable draggableId={task.id} index={index}>

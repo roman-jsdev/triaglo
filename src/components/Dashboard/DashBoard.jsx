@@ -1,8 +1,11 @@
 import { Fragment, useEffect, useRef, useState } from "react";
-import { useBoardId } from "../../hooks/useBoardId";
-import { useDB } from "../../hooks/useDB";
-import { useUserState } from "../../store/UserContext/UserContext";
-import { Loader } from "../Loader/Loader";
+import { useBoardId } from "@hooks/useBoardId";
+import { useDB } from "@hooks/useDB";
+import { useUserState } from "@store/UserContext/UserContext";
+import { Loader } from "@components/Loader/Loader";
+import { getBoardsSections, setActiveClassName, storage } from "@src/utils";
+import { BoardsLinks } from "@components/BoardsLinks";
+import { tabs } from "@src/constants";
 import {
   Wrapper,
   BoardsWrapper,
@@ -10,9 +13,6 @@ import {
   Subtitle,
   BoardsSections,
 } from "./Styled";
-import { getBoardsSections, setActiveClassName, storage } from "../../utils";
-import { BoardsLinks } from "../BoardsLinks";
-import { tabs } from "../../constants";
 
 export const DashBoard = () => {
   const [mounted, setMounted] = useState(false);

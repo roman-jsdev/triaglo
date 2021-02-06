@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useReducer } from "react";
 import { BoardContext } from "./BoardContext";
 import { boardReducer } from "./boardReducer";
-import { useBoardId } from "../../hooks/useBoardId";
-import { useDB } from "../../hooks/useDB";
-import { useUserState } from "../UserContext/UserContext";
-import { storage } from "../../utils";
+import { useBoardId } from "@hooks/useBoardId";
+import { useDB } from "@hooks/useDB";
+import { useUserState } from "@store/UserContext/UserContext";
+import { storage } from "@src/utils";
 import {
   addNewColumnAction,
   addNewTaskAction,

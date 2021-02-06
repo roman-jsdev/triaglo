@@ -1,11 +1,11 @@
 import { useRef, useState } from "react";
-import { useBoardId } from "../../hooks/useBoardId";
-import { useBoardOwner } from "../../hooks/useBoardOwner";
-import { useDB } from "../../hooks/useDB";
-import { useOutsideClick } from "../../hooks/useOutsideClick";
-import { useBoardState } from "../../store/BoardContext/BoardContext";
-import { useUserState } from "../../store/UserContext/UserContext";
-import { validateEmail } from "../../utils";
+import { useBoardId } from "@hooks/useBoardId";
+import { useBoardOwner } from "@hooks/useBoardOwner";
+import { useDB } from "@hooks/useDB";
+import { useOutsideClick } from "@hooks/useOutsideClick";
+import { useBoardState } from "@store/BoardContext/BoardContext";
+import { useUserState } from "@store/UserContext/UserContext";
+import { validateEmail } from "@src/utils";
 import {
   Button,
   ClosePopup,

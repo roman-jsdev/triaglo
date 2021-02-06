@@ -1,5 +1,5 @@
-import { useAuthState } from "../store/AuthContext/AuthContext";
-import { useBoardState } from "../store/BoardContext/BoardContext";
+import { useAuthState } from "@store/AuthContext/AuthContext";
+import { useBoardState } from "@store/BoardContext/BoardContext";
 
 export const useAccessBoard = () => {
   const {

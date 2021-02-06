@@ -1,4 +1,4 @@
-import { objectFilter } from "../../utils";
+import { objectFilter } from "@src/utils";
 import {
   ADD_NEW_COLUMN,
   ADD_NEW_TASK,
@@ -14,7 +14,7 @@ import {
   SET_NEW_COLUMN,
   SET_NEW_SAME_COLUMN,
   SET_TASK_TITLE,
-} from "../types";
+} from "@store/types";
 
 export const fetchInitialStateAction = (response) => ({
   type: FETCH_INITIAL_STATE,

@@ -2,7 +2,7 @@ import {
   firstDashboardSection,
   secondDashboardSection,
   thirdDashboardSection,
-} from "./constants";
+} from "@src/constants";
 
 export const validateEmail = (email) => [
   /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i.test(

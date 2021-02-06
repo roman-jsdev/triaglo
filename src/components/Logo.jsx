@@ -1,4 +1,4 @@
-import { useAuthState } from "../store/AuthContext/AuthContext";
+import { useAuthState } from "@store/AuthContext/AuthContext";
 
 export const Logo = () => {
   const {

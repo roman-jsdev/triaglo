@@ -1,5 +1,5 @@
-import { Button } from "../RemoveColumnBtn/Styled";
-import { useBoardState } from "../../store/BoardContext/BoardContext";
+import { useBoardState } from "@store/BoardContext/BoardContext";
+import { Button } from "@components/RemoveColumnBtn/Styled";
 
 export const RemoveTaskBtn = () => {
   const { removeTask: removeTaskFromState } = useBoardState();

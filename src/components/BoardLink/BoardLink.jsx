@@ -1,8 +1,8 @@
-import { Link } from "react-router-dom";
-import { useDB } from "../../hooks/useDB";
-import { useUserState } from "../../store/UserContext/UserContext";
-import { storage } from "../../utils";
+import { useDB } from "@hooks/useDB";
+import { useUserState } from "@store/UserContext/UserContext";
+import { storage } from "@src/utils";
 import { Wrapper, DeleteBtn } from "./Styled";
+import { Link } from "react-router-dom";
 
 export const BoardLink = ({ to, type, title, id, onClick, boardId }) => {
   const { userId } = storage();

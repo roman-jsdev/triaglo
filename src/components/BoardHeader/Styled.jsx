@@ -1,5 +1,6 @@
+import { AddButton } from "@components/AddNewTaskBtn/Styled";
 import styled from "styled-components";
-import { AddButton } from "../AddNewTaskBtn/Styled";
+
 
 export const Wrapper = styled.div`
   width: 100%;

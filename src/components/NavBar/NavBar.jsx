@@ -1,4 +1,9 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { useRef } from "react";
+import { useAuthState } from "@store/AuthContext/AuthContext";
+import { Logo } from "@components/Logo";
+import { useWindowWidth } from "@hooks/useWindowWidth";
+import { NavbarLinks } from "./NavbarLinks";
+import { useUserState } from "@store/UserContext/UserContext";
 import {
   Nav,
   Brand,
@@ -10,12 +15,7 @@ import {
   PopupLogout,
   LogoutOverlay,
 } from "./Styled";
-import { useAuthState } from "../../store/AuthContext/AuthContext";
-import { Logo } from "../Logo";
-import { useWindowWidth } from "../../hooks/useWindowWidth";
-import { useRef } from "react";
-import { NavbarLinks } from "./NavbarLinks";
-import { useUserState } from "../../store/UserContext/UserContext";
+import { NavLink, useLocation } from "react-router-dom";
 
 export const NavBar = () => {
   const {

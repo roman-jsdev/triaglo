@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
-import { useOutsideClick } from "../../hooks/useOutsideClick";
-import { useBoardState } from "../../store/BoardContext/BoardContext";
+import { useOutsideClick } from "@hooks/useOutsideClick";
+import { useBoardState } from "@store/BoardContext/BoardContext";
 import {
   AddButton,
   AddLink,

@@ -13,7 +13,7 @@ import {
   FETCH_INITIAL_STATE,
   SET_NEW_BOARD_TITLE,
   SET_BOARD_BG,
-} from "../types";
+} from "@store/types";
 
 const cases = {
   [FETCH_INITIAL_STATE]: (state, { payload }) => ({

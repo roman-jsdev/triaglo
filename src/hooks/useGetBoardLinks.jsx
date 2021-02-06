@@ -1,4 +1,4 @@
-import { useUserState } from "../store/UserContext/UserContext";
+import { useUserState } from "@store/UserContext/UserContext";
 
 export const useGetBoardsLinks = (isDBLoading, type) => {
   const {

@@ -7,6 +7,7 @@ import {
   REMOVE_COLUMN,
   REMOVE_TASK,
   REMOVE_USER_FROM_BOARD,
+  SET_BOARD_BG,
   SET_COLUMN_ORDER,
   SET_COLUMN_TITLE,
   SET_NEW_BOARD_TITLE,
@@ -205,4 +206,9 @@ export const removeUserFromBoardAction = ({ invited }, email) => ({
 export const setNewBoardTitleAction = (title) => ({
   type: SET_NEW_BOARD_TITLE,
   payload: title,
+});
+
+export const setBoardBgAction = (bg) => ({
+  type: SET_BOARD_BG,
+  payload: bg,
 });

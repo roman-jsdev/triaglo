@@ -13,6 +13,7 @@ import {
   removeColumnAction,
   removeTaskAction,
   removeUserFromBoardAction,
+  setBoardBgAction,
   setColumnOrderAction,
   setColumnTitleAction,
   setNewBoardTitleAction,
@@ -111,6 +112,8 @@ export const BoardState = ({ children }) => {
 
   const setNewBoardTitle = (title) => dispatch(setNewBoardTitleAction(title));
 
+  const setBoardBg = (bg) => dispatch(setBoardBgAction(bg));
+
   return (
     <BoardContext.Provider
       value={{
@@ -128,6 +131,7 @@ export const BoardState = ({ children }) => {
         removeUserFromBoard,
         fetchInitialState,
         setNewBoardTitle,
+        setBoardBg,
       }}
     >
       {children}

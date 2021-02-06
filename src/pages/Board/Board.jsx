@@ -62,10 +62,7 @@ export const Board = () => {
               </DragDropContext>
             </>
           ) : (
-            <NoAccess
-              style={{ color: "var(--main-bark-color)" }}
-              onLoad={(document.body.style.backgroundColor = "inherit")}
-            >
+            <NoAccess style={{ color: "var(--main-bark-color)" }}>
               No Access To This Board
             </NoAccess>
           )}

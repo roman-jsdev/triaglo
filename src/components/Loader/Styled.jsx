@@ -6,13 +6,14 @@ export const LoaderWrapper = styled.div`
   right: 0;
   bottom: 0;
   left: 0;
-  background-color: #5959e7;
+  background-color: var(--main-light-background);
   display: flex;
   justify-content: center;
   align-items: center;
 
   span {
-    font-size: 120px;
+    font-size: 28px;
+    font-weight: 300;
     color: #ffffff;
   }
 `;

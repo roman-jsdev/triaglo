@@ -5,7 +5,7 @@ import { useDB } from "../../hooks/useDB";
 import { useOutsideClick } from "../../hooks/useOutsideClick";
 import { useBoardState } from "../../store/BoardContext/BoardContext";
 import { useUserState } from "../../store/UserContext/UserContext";
-import { storage, validateEmail } from "../../utils";
+import { validateEmail } from "../../utils";
 import {
   Button,
   ClosePopup,
@@ -35,13 +35,17 @@ export const BoardHeader = () => {
   const popupRef = useRef();
   const titleRef = useRef();
   const {
-    userState: { userId, boards },
+    userState: { userId },
   } = useUserState();
-  const [setUserBoardTitle] = useDB("patch", `users/${userId}/boards/${boardId}`);
+  const [setUserBoardTitle] = useDB(
+    "patch",
+    `users/${userId}/boards/${boardId}`
+  );
 
   const onTitleFocus = () => titleRef.current.select();
 
   const setTitleToState = () => {
+    if (!isOwner) return;
     setNewBoardTitle(title);
     setUserBoardTitle({ title });
   };
@@ -100,6 +104,9 @@ export const BoardHeader = () => {
         onBlur={setTitleToState}
         onKeyPress={changeTitleOnEnterPress}
         maxLength={20}
+        readOnly={!isOwner}
+        disabled={!isOwner}
+        isOwner={isOwner}
       />
       <Button onClick={openPopup}>Invite</Button>
       <PopupInvite ref={popupRef}>

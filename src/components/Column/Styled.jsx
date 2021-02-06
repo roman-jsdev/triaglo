@@ -13,11 +13,13 @@ export const Container = styled.div`
 
   @media screen and (max-width: 576px) {
     max-height: calc(82vh - 16px);
+    width: 270px;
+    min-width: 270px;
   }
 `;
 
 export const TaskList = styled.div`
-  padding: ${({ isEmpty }) => (!isEmpty ? '2px' : "8px")};
+  padding: ${({ isEmpty }) => (!isEmpty ? "2px" : "8px")};
   transition: background-color 0.15s ease;
   background-color: ${({ isDraggingOver }) =>
     isDraggingOver

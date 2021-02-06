@@ -3,15 +3,19 @@ import {
   Nav,
   Brand,
   NavLinks,
-  NavLinkSingle,
   MobileMenuLink,
   Backdrop,
   Overlay,
+  PopupLogoutButton,
+  PopupLogout,
+  LogoutOverlay,
 } from "./Styled";
 import { useAuthState } from "../../store/AuthContext/AuthContext";
 import { Logo } from "../Logo";
 import { useWindowWidth } from "../../hooks/useWindowWidth";
 import { useRef } from "react";
+import { NavbarLinks } from "./NavbarLinks";
+import { useUserState } from "../../store/UserContext/UserContext";
 
 export const NavBar = () => {
   const {
@@ -21,14 +25,29 @@ export const NavBar = () => {
   const [windowWidth] = useWindowWidth();
   const backdropRef = useRef();
   const overlayRef = useRef();
+  const logoutPopupRef = useRef();
+  const logoutOverlay = useRef();
+
+  const {
+    userState: { email },
+  } = useUserState();
   const isHome = pathname === "/";
   const links = [];
 
   if (!isHome && isLoggedIn)
     links.push({ to: "/", exact: true, title: "Home" });
-  if (isLoggedIn) links.push({ to: "/logout", exact: false, title: "Logout" });
 
   const isMobile = windowWidth < 576;
+
+  const showLogoutPopup = () => {
+    logoutPopupRef.current.classList.add("show");
+    logoutOverlay.current.style.display = "block";
+  };
+
+  const hideLogoutPopup = () => {
+    logoutPopupRef.current.classList.remove("show");
+    logoutOverlay.current.style.display = "none";
+  };
 
   const showBackdrop = () => {
     backdropRef.current.style.transform = "translateX(0)";
@@ -55,37 +74,35 @@ export const NavBar = () => {
             <MobileMenuLink onClick={showBackdrop}>Menu</MobileMenuLink>
             <Backdrop ref={backdropRef}>
               <ul>
-                {links.map(({ to, exact, title }, index) => (
-                  <NavLinkSingle key={index} isLoggedIn={isLoggedIn}>
-                    <NavLink
-                      to={to}
-                      exact={exact}
-                      className="nav-link"
-                      activeClassName="active"
-                      onClick={closeBackdrop}
-                    >
-                      {title}
-                    </NavLink>
-                  </NavLinkSingle>
-                ))}
+                <NavbarLinks
+                  links={links}
+                  isLoggedIn={isLoggedIn}
+                  onClick={closeBackdrop}
+                />
+                <NavbarLinks
+                    links={[{ to: "/logout", exact: false, title: "Logout" }]}
+                    isLoggedIn={isLoggedIn}
+                  />
               </ul>
             </Backdrop>
             <Overlay ref={overlayRef} onClick={closeBackdrop} />
           </>
         ) : (
           <>
-            {links.map(({ to, exact, title }, index) => (
-              <NavLinkSingle key={index} isLoggedIn={isLoggedIn}>
-                <NavLink
-                  to={to}
-                  exact={exact}
-                  className="nav-link"
-                  activeClassName="active"
-                >
-                  {title}
-                </NavLink>
-              </NavLinkSingle>
-            ))}
+            {isLoggedIn && (
+              <>
+                <PopupLogoutButton onClick={showLogoutPopup}>
+                  {email}
+                </PopupLogoutButton>
+                <PopupLogout ref={logoutPopupRef}>
+                  <NavbarLinks
+                    links={[{ to: "/logout", exact: false, title: "Logout" }]}
+                    isLoggedIn={isLoggedIn}
+                  />
+                </PopupLogout>
+                <LogoutOverlay ref={logoutOverlay} onClick={hideLogoutPopup} />
+              </>
+            )}
           </>
         )}
       </NavLinks>

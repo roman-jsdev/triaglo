@@ -24,7 +24,7 @@ export const Button = styled.div`
   font-weight: 500;
   position: relative;
   z-index: 4;
-  margin-right: 10px;
+  margin-right: 15px;
 
   &:hover {
     background-color: hsla(0, 0%, 100%, 0.55);
@@ -37,7 +37,7 @@ export const TitleInput = styled.input`
   color: white;
   font-family: var(--main-font-family);
   padding: 6px 0px;
-  cursor: pointer;
+  cursor: ${({ isOwner }) => (isOwner ? "pointer" : "default")};
   user-select: none;
   transition: all 0.3s;
   font-size: 16px;
@@ -132,4 +132,20 @@ export const InvitedElementDelete = styled.div`
   font-size: 16px;
   cursor: pointer;
   user-select: none;
+`;
+
+export const ColorInput = styled.input`
+  border: none;
+  background-color: hsla(0, 0%, 100%, 0.32);
+  outline: none;
+  padding: 2px 5px;
+  margin: 0;
+  height: 32px;
+  border-radius: var(--main-border-radius);
+  width: 36px;
+  cursor: pointer;
+
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
 `;

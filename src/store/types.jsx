@@ -8,6 +8,7 @@ export const REMOVE_TASK = "REMOVE_TASK";
 export const SET_COLUMN_TITLE = "SET_COLUMN_TITLE";
 export const SET_TASK_TITLE = "SET_TASK_TITLE";
 export const SET_NEW_BOARD_TITLE = "SET_NEW_BOARD_TITLE";
+export const SET_BOARD_BG = "SET_BOARD_BG"; 
 
 export const AUTH_SUCCESS = "AUTH_SUCCESS";
 export const AUTH_LOGOUT = "AUTH_LOGOUT";

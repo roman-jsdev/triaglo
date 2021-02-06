@@ -21,6 +21,10 @@ export const Input = styled.input`
     outline: none;
     box-shadow: 0 0 0px 0.3px #0c4891;
   }
+
+  @media screen and (max-width: 576px) {
+    width: 70%;
+  }
 `;
 
 export const AddButton = styled.p`

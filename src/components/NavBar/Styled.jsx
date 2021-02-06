@@ -21,6 +21,10 @@ export const Nav = styled.nav`
     max-width: ${({ isLoggedIn }) => (isLoggedIn ? "100%" : "1024px")};
     padding: 0 1rem;
   }
+
+  @media screen and (max-height: 650px) {
+    height: 15vh;
+  }
 `;
 
 export const Brand = styled.div`
@@ -107,4 +111,37 @@ export const Overlay = styled.div`
   right: 0;
   display: none;
   transition: all 0.3s ease-in;
+`;
+
+export const PopupLogoutButton = styled.p`
+  margin-top: 0;
+  font-size: 18px;
+  color: var(--main-light-color);
+  cursor: pointer;
+`;
+
+export const PopupLogout = styled.div`
+  display: none;
+  position: absolute;
+  top: 4.5vh;
+  width: 300px;
+  height: 50px;
+  background-color: var(--main-light-color);
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 7px 1px #00000045;
+  right: 10px;
+  z-index: 10;
+
+  &.show {
+    display: flex;
+  }
+
+  & > li > a {
+    color: var(--main-dark-color);
+  }
+`;
+
+export const LogoutOverlay = styled(Overlay)`
+  background-color: transparent;
 `;

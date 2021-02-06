@@ -12,6 +12,7 @@ import {
   REMOVE_USER_FROM_BOARD,
   FETCH_INITIAL_STATE,
   SET_NEW_BOARD_TITLE,
+  SET_BOARD_BG,
 } from "../types";
 
 const cases = {
@@ -74,6 +75,10 @@ const cases = {
   [SET_NEW_BOARD_TITLE]: (state, { payload: title }) => ({
     ...state,
     title,
+  }),
+  [SET_BOARD_BG]: (state, { payload: bg }) => ({
+    ...state,
+    bg,
   }),
   DEFAULT: (state) => state,
 };

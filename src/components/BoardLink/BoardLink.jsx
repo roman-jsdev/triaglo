@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { useBoardId } from "../../hooks/useBoardId";
 import { useDB } from "../../hooks/useDB";
 import { useUserState } from "../../store/UserContext/UserContext";
 import { storage } from "../../utils";

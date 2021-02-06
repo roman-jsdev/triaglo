@@ -38,9 +38,7 @@ export const useAuth = (authData, type) => {
     }
   };
 
-  useEffect(() => {
-    return setIsLoading(false);
-  }, []);
+  useEffect(() => setIsLoading(false), []);
 
   return [auth, isLoading];
 };

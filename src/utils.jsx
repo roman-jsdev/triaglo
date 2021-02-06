@@ -33,7 +33,7 @@ export const modifyResponse = ({ data }) => {
     tasks: {},
     columns: {},
     columnOrder: [],
-    bg: "#0274bb",
+    bg: "#1d76db",
     boards: {},
   };
 

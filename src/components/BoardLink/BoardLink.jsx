@@ -1,8 +1,8 @@
-import { Link } from "react-router-dom";
-import { useDB } from "../../hooks/useDB";
-import { useUserState } from "../../store/UserContext/UserContext";
-import { storage } from "../../utils";
+import { useDB } from "@hooks/useDB";
+import { useUserState } from "@store/UserContext/UserContext";
+import { storage } from "@src/utils";
 import { Wrapper, DeleteBtn } from "./Styled";
+import { Link } from "react-router-dom";
 
 export const BoardLink = ({ to, type, title, id, onClick, boardId }) => {
   const { userId } = storage();
@@ -38,7 +38,7 @@ export const BoardLink = ({ to, type, title, id, onClick, boardId }) => {
           <Link to={type === "new" ? `/${id}` : to}>
             <span>{title}</span>
           </Link>
-          {type === "new" ? null : (
+          {type !== "new" && (
             <DeleteBtn onClick={deleteBoard}>
               <i className="fas fa-trash-alt" />
             </DeleteBtn>

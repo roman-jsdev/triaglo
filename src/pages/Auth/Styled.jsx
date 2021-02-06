@@ -1,5 +1,5 @@
+import { Wrapper } from "@components/WelcomePage/Styled";
 import styled from "styled-components";
-import { Wrapper } from "../../components/WelcomePage/Styled";
 
 export const AuthPageWrapper = styled(Wrapper)`
   justify-content: center;

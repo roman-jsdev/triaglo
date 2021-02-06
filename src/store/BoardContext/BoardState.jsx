@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useReducer } from "react";
 import { BoardContext } from "./BoardContext";
 import { boardReducer } from "./boardReducer";
-import { useBoardId } from "../../hooks/useBoardId";
-import { useDB } from "../../hooks/useDB";
-import { useUserState } from "../UserContext/UserContext";
-import { storage } from "../../utils";
+import { useBoardId } from "@hooks/useBoardId";
+import { useDB } from "@hooks/useDB";
+import { useUserState } from "@store/UserContext/UserContext";
+import { storage } from "@src/utils";
 import {
   addNewColumnAction,
   addNewTaskAction,
@@ -36,6 +36,7 @@ export const BoardState = ({ children }) => {
   const [getDB, isLoading, response] = useDB("get", `boards/${boardId}`);
   const [putToUserDB] = useDB("put", `users/${userId}/boards/${boardId}`, {
     owner: "notOwner",
+    title: boardState.title,
   });
   const [putToBoardDB] = useDB("put", `boards/${boardId}`, boardState);
 
@@ -51,7 +52,7 @@ export const BoardState = ({ children }) => {
         response.invited.includes(email) &&
         response.owner !== userId
       ) {
-        addBoardToUser({ owner: "notOwner" });
+        addBoardToUser({ owner: "notOwner", title: boardState.title });
         putToUserDB();
       }
 

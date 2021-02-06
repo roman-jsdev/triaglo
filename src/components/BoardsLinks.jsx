@@ -1,6 +1,6 @@
-import { useGetBoardsLinks } from "../hooks/useGetBoardLinks";
-import { BoardLink } from "./BoardLink/BoardLink";
-import { Wrapper } from "./BoardLink/Styled";
+import { useGetBoardsLinks } from "@hooks/useGetBoardLinks";
+import { BoardLink } from "@components/BoardLink/BoardLink";
+import { Wrapper } from "@components/BoardLink/Styled";
 
 export const BoardsLinks = ({
   isDBLoading,

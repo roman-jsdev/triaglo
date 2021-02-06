@@ -1,13 +1,13 @@
 import { useEffect } from "react";
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import { Container, NoAccess } from "./Styled";
-import { AddNewColumn } from "../../components/AddNewColumnBtn/AddNewColumnBtn";
-import { BoardHeader } from "../../components/BoardHeader/BoardHeader";
+import { AddNewColumn } from "@components/AddNewColumnBtn/AddNewColumnBtn";
+import { BoardHeader } from "@components/BoardHeader/BoardHeader";
 import { ColumnsList } from "./ColumnsList";
-import { Loader } from "../../components/Loader/Loader";
-import { useAccessBoard } from "../../hooks/useAccessBoard";
-import { useOnDragEnd } from "../../hooks/useOnDragEnd";
-import { useBoardState } from "../../store/BoardContext/BoardContext";
+import { Loader } from "@components/Loader/Loader";
+import { useAccessBoard } from "@hooks/useAccessBoard";
+import { useOnDragEnd } from "@hooks/useOnDragEnd";
+import { useBoardState } from "@store/BoardContext/BoardContext";
+import { Container, NoAccess } from "./Styled";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
 
 export const Board = () => {
   const {

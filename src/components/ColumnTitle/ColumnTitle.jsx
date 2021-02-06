@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useBoardState } from "../../store/BoardContext/BoardContext";
-import { RemoveColumnBtn } from "../RemoveColumnBtn/RemoveColumnBtn";
+import { useBoardState } from "@store/BoardContext/BoardContext";
+import { RemoveColumnBtn } from "@components/RemoveColumnBtn/RemoveColumnBtn";
 import { Title, Input } from "./Styled";
 
 export const ColumnTitle = ({
@@ -12,14 +12,12 @@ export const ColumnTitle = ({
   const titleRef = useRef();
 
   const changeTitle = ({ target: { value } }) => {
-    setColumnTitleContent(value);;
+    setColumnTitleContent(value);
     titleRef.current.style.height = "20px";
     titleRef.current.style.height = titleRef.current.scrollHeight + "px";
   };
 
-  const setColumnToState = () => {
-    setColumnTitle(columnId, columnTitleContent);
-  };
+  const setColumnToState = () => setColumnTitle(columnId, columnTitleContent);
 
   const changeTitleOnEnterPress = (e) => {
     if (e.key === "Enter") {
@@ -36,7 +34,7 @@ export const ColumnTitle = ({
   };
 
   const finishTitleChange = useCallback(({ target }) => {
-    if (titleRef.current !== null) {
+    if (titleRef.current) {
       if (target !== titleRef.current) {
         titleRef.current.style.pointerEvents = "none";
       }

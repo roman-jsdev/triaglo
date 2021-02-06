@@ -1,6 +1,6 @@
-import axios from "axios";
 import { useCallback, useState } from "react";
-import { modifyResponse } from "../utils";
+import { modifyResponse } from "@src/utils";
+import axios from "axios";
 
 export const useDB = (method, path, data) => {
   const [response, setResponse] = useState(null);

@@ -1,8 +1,8 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
+import { useAuthState } from "@store/AuthContext/AuthContext";
+import { storage } from "@src/utils";
 import { useHistory } from "react-router-dom";
-import { useAuthState } from "../store/AuthContext/AuthContext";
-import { storage } from "../utils";
+import axios from "axios";
 
 export const useAuth = (authData, type) => {
   const { login } = useAuthState();

@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
-import { useOutsideClick } from "../../hooks/useOutsideClick";
-import { useBoardState } from "../../store/BoardContext/BoardContext";
+import { useOutsideClick } from "@hooks/useOutsideClick";
+import { useBoardState } from "@store/BoardContext/BoardContext";
 import {
   AddButton,
   AddLink,
@@ -42,8 +42,8 @@ export const AddNewColumn = () => {
     setInputValue("");
   };
 
-  const addColumnOnEnterPress = (event) => {
-    if (event.key !== "Enter" || !inputValue) return;
+  const addColumnOnEnterPress = ({ key }) => {
+    if (key !== "Enter" || !inputValue) return;
     addColumn();
   };
 

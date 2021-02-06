@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useBoardState } from "../../store/BoardContext/BoardContext";
-import { Input, ButtonsWrapper, AddButton } from "../AddNewTaskBtn/Styled";
+import { useBoardState } from "@store/BoardContext/BoardContext";
+import { Input, ButtonsWrapper, AddButton } from "./Styled";
 
 export const AddNewTaskBtn = () => {
   const [inputValue, setInputValue] = useState("");

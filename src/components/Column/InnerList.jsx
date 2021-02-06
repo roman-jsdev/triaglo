@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Task } from "../Task/Task";
+import { Task } from "@components/Task/Task";
 
 export const InnerList = ({ tasks }) =>
   useMemo(

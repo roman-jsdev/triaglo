@@ -1,7 +1,7 @@
 import { useCallback, useReducer } from "react";
-import { storage } from "../../utils";
-import { AUTH_LOGOUT, AUTH_SUCCESS } from "../types";
-import { useUserState } from "../UserContext/UserContext";
+import { storage } from "@src/utils";
+import { AUTH_LOGOUT, AUTH_SUCCESS } from "@store/types";
+import { useUserState } from "@store/UserContext/UserContext";
 import { AuthContext } from "./AuthContext";
 import { authReducer } from "./authReducer";
 

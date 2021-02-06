@@ -4,7 +4,7 @@ import {
   REMOVE_BOARD_FROM_USER,
   SET_INITIAL_USER_STATE,
   SET_USER_STATE_LOADING,
-} from "../types";
+} from "@store/types";
 
 const cases = {
   [ADD_BOARD_TO_USER]: (state, { payload: boards }) => ({

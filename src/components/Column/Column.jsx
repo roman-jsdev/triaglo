@@ -1,8 +1,8 @@
-import { Draggable, Droppable } from "react-beautiful-dnd";
-import { Container, TaskList } from "./Styled";
-import { AddNewTaskBtn } from "../AddNewTaskBtn/AddNewTaskBtn";
-import { ColumnTitle } from "../ColumnTitle/ColumnTitle";
+import { AddNewTaskBtn } from "@components/AddNewTaskBtn/AddNewTaskBtn";
+import { ColumnTitle } from "@components/ColumnTitle/ColumnTitle";
 import { InnerList } from "./InnerList";
+import { Container, TaskList } from "./Styled";
+import { Draggable, Droppable } from "react-beautiful-dnd";
 
 export const Column = ({ column, tasks, index }) => (
   <Draggable draggableId={column.id} index={index}>

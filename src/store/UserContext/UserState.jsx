@@ -1,6 +1,6 @@
 import { useCallback, useReducer } from "react";
-import { useDB } from "../../hooks/useDB";
-import { storage } from "../../utils";
+import { useDB } from "@hooks/useDB";
+import { storage } from "@src/utils";
 import {
   addBoardToUserAction,
   fetchInitialUserStateAction,

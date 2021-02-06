@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { AuthForm } from "../../components/AuthForm/AuthForm";
-import { useAuth } from "../../hooks/useAuth";
+import { AuthForm } from "@components/AuthForm/AuthForm";
+import { useAuth } from "@hooks/useAuth";
 import { AuthPageWrapper } from "./Styled";
 
 export const Auth = () => {

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useBoardState } from "@store/BoardContext/BoardContext";
 import { Wrapper, Input } from "./Styled";
-import { useBoardState } from "../../store/BoardContext/BoardContext";
 
 export const TaskTitle = ({ task: { id: taskId, content }, isDragging }) => {
   const [taskContent, setTaskContent] = useState(content);
@@ -9,16 +9,14 @@ export const TaskTitle = ({ task: { id: taskId, content }, isDragging }) => {
   const wrapperRef = useRef();
 
   const changeTask = ({ target: { value } }) => {
+    setTaskContent(value);
     wrapperRef.current.style.height = "26px";
     titleRef.current.style.height = "18px";
-    setTaskContent(value);
     titleRef.current.style.height = titleRef.current.scrollHeight + "px";
     wrapperRef.current.style.height = titleRef.current.scrollHeight + "px";
   };
 
-  const setTaskToState = () => {
-    setTaskTitle(taskId, taskContent);
-  };
+  const setTaskToState = () => setTaskTitle(taskId, taskContent);
 
   const changeTaskOnEnterPress = (e) => {
     if (e.key === "Enter") {
@@ -35,7 +33,7 @@ export const TaskTitle = ({ task: { id: taskId, content }, isDragging }) => {
   };
 
   const finishTaskChange = useCallback((e) => {
-    if (titleRef.current !== null) {
+    if (titleRef.current) {
       if (e.target !== titleRef.current) {
         titleRef.current.style.pointerEvents = "none";
       }

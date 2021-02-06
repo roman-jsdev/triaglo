@@ -36,6 +36,7 @@ export const BoardState = ({ children }) => {
   const [getDB, isLoading, response] = useDB("get", `boards/${boardId}`);
   const [putToUserDB] = useDB("put", `users/${userId}/boards/${boardId}`, {
     owner: "notOwner",
+    title: boardState.title,
   });
   const [putToBoardDB] = useDB("put", `boards/${boardId}`, boardState);
 
@@ -51,7 +52,7 @@ export const BoardState = ({ children }) => {
         response.invited.includes(email) &&
         response.owner !== userId
       ) {
-        addBoardToUser({ owner: "notOwner" });
+        addBoardToUser({ owner: "notOwner", title: boardState.title });
         putToUserDB();
       }
 

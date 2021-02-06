@@ -1,11 +1,12 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useBoardId } from "@hooks/useBoardId";
 import { useBoardOwner } from "@hooks/useBoardOwner";
 import { useDB } from "@hooks/useDB";
 import { useOutsideClick } from "@hooks/useOutsideClick";
 import { useBoardState } from "@store/BoardContext/BoardContext";
-import { useUserState } from "@store/UserContext/UserContext";
 import { validateEmail } from "@src/utils";
+import { storage } from "@src/utils";
+import { useUserState } from "@store/UserContext/UserContext";
 import {
   Button,
   ClosePopup,
@@ -34,13 +35,14 @@ export const BoardHeader = () => {
   const [isOwner] = useBoardOwner();
   const popupRef = useRef();
   const titleRef = useRef();
-  const {
-    userState: { userId },
-  } = useUserState();
+  const { userId } = storage() || {};
   const [setUserBoardTitle] = useDB(
     "patch",
     `users/${userId}/boards/${boardId}`
   );
+  const {
+    userState: { boards: userBoards },
+  } = useUserState();
 
   const onTitleFocus = () => titleRef.current.select();
 
@@ -49,6 +51,11 @@ export const BoardHeader = () => {
     setNewBoardTitle(title);
     setUserBoardTitle({ title });
   };
+
+  useEffect(() => {
+    if (userBoards[boardId] && title !== userBoards[boardId].title)
+      setUserBoardTitle({ title });
+  }, []);
 
   const changeTitleOnEnterPress = (e) => {
     if (e.key === "Enter") {
@@ -83,16 +90,14 @@ export const BoardHeader = () => {
     }
   };
 
-  const handleDeleteUser = ({ target }) => {
+  const deleteUser = ({ target }) => {
     const {
-      firstElementChild: { innerHTML },
+      firstElementChild: { innerHTML: userEmail },
     } = target.closest("[data-user]");
-    removeUserFromBoard(innerHTML);
+    removeUserFromBoard(userEmail);
   };
 
-  const addUserOnEnterPress = ({ key }) => {
-    if (key === "Enter") addUser();
-  };
+  const addUserOnEnterPress = ({ key }) => key === "Enter" && addUser();
 
   return (
     <Wrapper>
@@ -139,7 +144,7 @@ export const BoardHeader = () => {
               <InvitedElementWrapper key={index} data-user>
                 <InvitedElementName>{user}</InvitedElementName>
                 {isOwner && (
-                  <InvitedElementDelete onClick={handleDeleteUser}>
+                  <InvitedElementDelete onClick={deleteUser}>
                     <i className="far fa-trash-alt" />
                   </InvitedElementDelete>
                 )}

@@ -31,6 +31,7 @@ export const Brand = styled.div`
   & a {
     display: flex;
     align-items: center;
+
     &:focus {
       outline: none;
     }

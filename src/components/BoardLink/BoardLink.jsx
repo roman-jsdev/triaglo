@@ -38,7 +38,7 @@ export const BoardLink = ({ to, type, title, id, onClick, boardId }) => {
           <Link to={type === "new" ? `/${id}` : to}>
             <span>{title}</span>
           </Link>
-          {type === "new" ? null : (
+          {type !== "new" && (
             <DeleteBtn onClick={deleteBoard}>
               <i className="fas fa-trash-alt" />
             </DeleteBtn>

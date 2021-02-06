@@ -21,6 +21,7 @@ export const Input = styled.textarea`
   overflow-y: hidden;
   resize: none;
   height: 25px;
+
   &:focus {
     cursor: text;
     background-color: var(--task-background);

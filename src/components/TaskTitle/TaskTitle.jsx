@@ -9,16 +9,14 @@ export const TaskTitle = ({ task: { id: taskId, content }, isDragging }) => {
   const wrapperRef = useRef();
 
   const changeTask = ({ target: { value } }) => {
+    setTaskContent(value);
     wrapperRef.current.style.height = "26px";
     titleRef.current.style.height = "18px";
-    setTaskContent(value);
     titleRef.current.style.height = titleRef.current.scrollHeight + "px";
     wrapperRef.current.style.height = titleRef.current.scrollHeight + "px";
   };
 
-  const setTaskToState = () => {
-    setTaskTitle(taskId, taskContent);
-  };
+  const setTaskToState = () => setTaskTitle(taskId, taskContent);
 
   const changeTaskOnEnterPress = (e) => {
     if (e.key === "Enter") {
@@ -35,7 +33,7 @@ export const TaskTitle = ({ task: { id: taskId, content }, isDragging }) => {
   };
 
   const finishTaskChange = useCallback((e) => {
-    if (titleRef.current !== null) {
+    if (titleRef.current) {
       if (e.target !== titleRef.current) {
         titleRef.current.style.pointerEvents = "none";
       }

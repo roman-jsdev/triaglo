@@ -9,7 +9,7 @@ import {
 
 export const addBoardToUserAction = ({ boards }, board) => ({
   type: ADD_BOARD_TO_USER,
-  payload: { ...boards, ...board },
+  payload: { ...boards, board },
 });
 
 export const removeBoardFromUserAction = ({ boards }, boardId) => ({

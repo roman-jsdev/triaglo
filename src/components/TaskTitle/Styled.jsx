@@ -12,6 +12,7 @@ export const Input = styled.textarea(
     height: 22px;
     width: 215px;
     font-family: inherit;
+
     &:focus {
       cursor: text;
       background-color: var(--task-background);

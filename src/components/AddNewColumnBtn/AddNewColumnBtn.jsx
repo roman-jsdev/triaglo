@@ -42,8 +42,8 @@ export const AddNewColumn = () => {
     setInputValue("");
   };
 
-  const addColumnOnEnterPress = (event) => {
-    if (event.key !== "Enter" || !inputValue) return;
+  const addColumnOnEnterPress = ({ key }) => {
+    if (key !== "Enter" || !inputValue) return;
     addColumn();
   };
 

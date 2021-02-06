@@ -3,7 +3,7 @@ import { useAuthState } from "@store/AuthContext/AuthContext";
 import { Logo } from "@components/Logo";
 import { useWindowWidth } from "@hooks/useWindowWidth";
 import { NavbarLinks } from "./NavbarLinks";
-import { useUserState } from "@store/UserContext/UserContext";
+import { storage } from "@src/utils";
 import {
   Nav,
   Brand,
@@ -27,10 +27,8 @@ export const NavBar = () => {
   const overlayRef = useRef();
   const logoutPopupRef = useRef();
   const logoutOverlay = useRef();
+  const { email } = storage() || {};
 
-  const {
-    userState: { email },
-  } = useUserState();
   const isHome = pathname === "/";
   const links = [];
 
@@ -80,9 +78,9 @@ export const NavBar = () => {
                   onClick={closeBackdrop}
                 />
                 <NavbarLinks
-                    links={[{ to: "/logout", exact: false, title: "Logout" }]}
-                    isLoggedIn={isLoggedIn}
-                  />
+                  links={[{ to: "/logout", exact: false, title: "Logout" }]}
+                  isLoggedIn={isLoggedIn}
+                />
               </ul>
             </Backdrop>
             <Overlay ref={overlayRef} onClick={closeBackdrop} />

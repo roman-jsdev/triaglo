@@ -22,9 +22,7 @@ export const AuthState = ({ children }) => {
   const login = useCallback(
     (token, id, email) => {
       dispatch({ type: AUTH_SUCCESS, payload: { token, id, email } });
-      return setTimeout(() => {
-        logout();
-      }, 3600000);
+      return setTimeout(logout, 3600000);
     },
     [logout]
   );

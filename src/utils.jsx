@@ -18,12 +18,13 @@ export const storage = (data) =>
 export const objectFilter = (object, callback) =>
   Object.keys(object)
     .filter(callback)
-    .reduce((obj, key) => {
-      return {
+    .reduce(
+      (obj, key) => ({
         ...obj,
         [key]: object[key],
-      };
-    }, {});
+      }),
+      {}
+    );
 
 export const modifyResponse = ({ data }) => {
   const { userId } = storage() || { userId: null };

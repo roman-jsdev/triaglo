@@ -10,7 +10,7 @@ and organize anything, with unlimited speed and cloud storage.
 - Realtime Database storage system
 - Users invitation features for collaborative projects
 ## Demo
-Discover all the features of the application absolutely free and right here [Demo](https://github.com/romanjsprodev/triaglo/)
+Discover all the features of the application absolutely free and right here [Demo](https://triaglo.web.app/)
 ## Licence
 Integrate or build upon it for free in your personal or commercial projects. Don't republish, redistribute or sell "as-is".  
 Read more here: [Licence](https://github.com/romanjsprodev/triaglo/blob/main/LICENSE)

@@ -2,7 +2,7 @@
 Triaglo is the useful, free, flexible, and visual way  to manage your projects  
 and organize anything, with unlimited speed and cloud storage.
 
-![alt text](https://raw.githubusercontent.com/romanjsprodev/triaglo/main/public/thumb.PNG)
+![alt text](https://github.com/romanjsprodev/triaglo/blob/main/public/thumb.PNG)
 ## Main Features
 - React-Hooks-based app with custom state management system
 - Modular and Flexible app architecture

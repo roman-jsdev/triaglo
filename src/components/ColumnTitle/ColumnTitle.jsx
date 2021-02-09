@@ -34,10 +34,8 @@ export const ColumnTitle = ({
   };
 
   const finishTitleChange = useCallback(({ target }) => {
-    if (titleRef.current) {
-      if (target !== titleRef.current) {
-        titleRef.current.style.pointerEvents = "none";
-      }
+    if (titleRef.current && target !== titleRef.current) {
+      titleRef.current.style.pointerEvents = "none";
     }
   }, []);
 

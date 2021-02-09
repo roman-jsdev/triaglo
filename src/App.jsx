@@ -14,9 +14,7 @@ export const App = () => {
     autoLogin,
   } = useAuthState();
 
-  useEffect(() => {
-    autoLogin();
-  }, [autoLogin]);
+  useEffect(autoLogin, [autoLogin]);
 
   return (
     <>

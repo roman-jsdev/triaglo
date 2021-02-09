@@ -32,11 +32,9 @@ export const TaskTitle = ({ task: { id: taskId, content }, isDragging }) => {
     titleRef.current.style.pointerEvents = "all";
   };
 
-  const finishTaskChange = useCallback((e) => {
-    if (titleRef.current) {
-      if (e.target !== titleRef.current) {
-        titleRef.current.style.pointerEvents = "none";
-      }
+  const finishTaskChange = useCallback(({ target }) => {
+    if (titleRef.current && target !== titleRef.current) {
+      titleRef.current.style.pointerEvents = "none";
     }
   }, []);
 

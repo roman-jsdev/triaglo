@@ -1,14 +1,19 @@
-import { AddNewTaskBtn } from "@components/AddNewTaskBtn/AddNewTaskBtn";
-import { ColumnTitle } from "@components/ColumnTitle/ColumnTitle";
+import { NewTaskButtonController } from "@containers/NewTaskButtonController";
+import { ColumnTitleController } from "@containers/ColumnTitleController";
 import { InnerList } from "./InnerList";
+
 import { Container, TaskList } from "./Styled";
+
 import { Draggable, Droppable } from "react-beautiful-dnd";
 
 export const Column = ({ column, tasks, index }) => (
   <Draggable draggableId={column.id} index={index}>
     {({ innerRef, draggableProps, dragHandleProps }) => (
       <Container ref={innerRef} {...draggableProps}>
-        <ColumnTitle providedProps={dragHandleProps} column={column} />
+        <ColumnTitleController
+          providedProps={dragHandleProps}
+          column={column}
+        />
         <Droppable droppableId={column.id} type="task">
           {({ innerRef, droppableProps, placeholder }, { isDraggingOver }) => (
             <TaskList
@@ -22,7 +27,7 @@ export const Column = ({ column, tasks, index }) => (
             </TaskList>
           )}
         </Droppable>
-        <AddNewTaskBtn />
+        <NewTaskButtonController />
       </Container>
     )}
   </Draggable>

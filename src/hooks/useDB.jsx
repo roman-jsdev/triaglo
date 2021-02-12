@@ -1,5 +1,7 @@
 import { useCallback, useState } from "react";
+
 import { modifyResponse } from "@src/utils";
+
 import axios from "axios";
 
 export const useDB = (method, path, data) => {
@@ -7,7 +9,7 @@ export const useDB = (method, path, data) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const getURL = (path) =>
-    `https://triaglo-default-rtdb.firebaseio.com/${path}.json?auth=${process.env.REACT_APP_DB_KEY}`;
+    `${process.env.REACT_APP_DB_URL}/${path}.json?auth=${process.env.REACT_APP_DB_KEY}`;
 
   const fetchDB = useCallback(
     async (asyncData, asyncPath) => {

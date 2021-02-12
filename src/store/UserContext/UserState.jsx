@@ -1,6 +1,11 @@
 import { useCallback, useReducer } from "react";
+
 import { useDB } from "@hooks/useDB";
+
 import { storage } from "@src/utils";
+
+import { UserContext } from "./UserContext";
+import { userReducer } from "./userReducer";
 import {
   addBoardToUserAction,
   fetchInitialUserStateAction,
@@ -8,8 +13,6 @@ import {
   setInitialUserStateAction,
   setUserStateLoadingAction,
 } from "./userActions";
-import { UserContext } from "./UserContext";
-import { userReducer } from "./userReducer";
 
 export const UserState = ({ children }) => {
   const { userId, email } = storage() || { userId: null, email: null };

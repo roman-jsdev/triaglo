@@ -11,23 +11,18 @@ import {
 export const AuthForm = ({
   onSubmit,
   isLogin,
-  setIsLogin,
   email,
-  setEmail,
   password,
-  setPassword,
   type,
   isLoading,
+  switchLink,
+  changeEmail,
+  changePassword
 }) => (
   <FormWrapper>
     <Title>{isLogin ? "Login" : "Sign Up For Free"}</Title>
     <SwitchLink
-      onClick={() => {
-        setIsLogin(!isLogin);
-        setEmail("");
-        setPassword("");
-      }}
-      href="#"
+      onClick={switchLink}
     >
       {isLogin
         ? "Don't have an account yet?  Sign Up"
@@ -38,7 +33,7 @@ export const AuthForm = ({
       <Input
         type="email"
         value={email}
-        onChange={({ target: { value } }) => setEmail(value)}
+        onChange={changeEmail}
         placeholder="Enter your Email..."
         id="emailInput"
       />
@@ -47,7 +42,7 @@ export const AuthForm = ({
         type="password"
         autoComplete="on"
         value={password}
-        onChange={({ target: { value } }) => setPassword(value)}
+        onChange={changePassword}
         placeholder="Enter your Password..."
         id="passwordInput"
       />

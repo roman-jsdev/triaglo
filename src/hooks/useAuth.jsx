@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
+
 import { useAuthState } from "@store/AuthContext/AuthContext";
+
 import { storage } from "@src/utils";
+
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 
@@ -11,7 +14,7 @@ export const useAuth = (authData, type) => {
 
   const getUrl = (type) => {
     const dynamicUrl = type === "login" ? "signInWithPassword" : "signUp";
-    return `https://identitytoolkit.googleapis.com/v1/accounts:${dynamicUrl}?key=${process.env.REACT_APP_API_KEY}`;
+    return `${process.env.REACT_APP_AUTH_URL}:${dynamicUrl}?key=${process.env.REACT_APP_API_KEY}`;
   };
 
   const auth = async () => {

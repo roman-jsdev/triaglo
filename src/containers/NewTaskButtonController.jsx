@@ -1,8 +1,10 @@
 import { useState } from "react";
-import { useBoardState } from "@store/BoardContext/BoardContext";
-import { Input, ButtonsWrapper, AddButton } from "./Styled";
 
-export const AddNewTaskBtn = () => {
+import { NewTaskButton } from "@components/NewTaskButton/NewTaskButton";
+
+import { useBoardState } from "@store/BoardContext/BoardContext";
+
+export const NewTaskButtonController = () => {
   const [inputValue, setInputValue] = useState("");
   const { addNewTask } = useBoardState();
 
@@ -20,14 +22,14 @@ export const AddNewTaskBtn = () => {
     addTask(event);
   };
 
+  const changeInputValue = ({ target: { value } }) => setInputValue(value);
+
   return (
-    <ButtonsWrapper onKeyPress={addTaskOnEnterPress}>
-      <Input
-        value={inputValue}
-        onChange={({ target: { value } }) => setInputValue(value)}
-        placeholder="Enter title of new task..."
-      />
-      <AddButton onClick={addTask}>Add task</AddButton>
-    </ButtonsWrapper>
+    <NewTaskButton
+      addTaskOnEnterPress={addTaskOnEnterPress}
+      inputValue={inputValue}
+      changeInputValue={changeInputValue}
+      addTask={addTask}
+    />
   );
 };

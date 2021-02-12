@@ -1,17 +1,12 @@
 import { useRef, useState } from "react";
-import { useOutsideClick } from "@hooks/useOutsideClick";
-import { useBoardState } from "@store/BoardContext/BoardContext";
-import {
-  AddButton,
-  AddLink,
-  Buttons,
-  ButtonsWrapper,
-  CloseButton,
-  Input,
-  Wrapper,
-} from "./Styled";
 
-export const AddNewColumn = () => {
+import { NewColumnButton } from "@components/NewColumnButton/NewColumnButton";
+
+import { useOutsideClick } from "@hooks/useOutsideClick";
+
+import { useBoardState } from "@store/BoardContext/BoardContext";
+
+export const NewColumnButtonController = () => {
   const { addNewColumn } = useBoardState();
   const [inputValue, setInputValue] = useState("");
   const buttonsRef = useRef();
@@ -33,6 +28,8 @@ export const AddNewColumn = () => {
     setInputValue("");
   };
 
+  const changeInputValue = ({ target: { value } }) => setInputValue(value);
+
   useOutsideClick(wrapperRef, closeButtonsWrapper);
 
   const addColumn = () => {
@@ -46,26 +43,18 @@ export const AddNewColumn = () => {
     if (key !== "Enter" || !inputValue) return;
     addColumn();
   };
-
   return (
-    <Wrapper ref={wrapperRef} onKeyPress={addColumnOnEnterPress}>
-      <AddLink onClick={openButtonsWrapper} ref={addLinkRef}>
-        <i className="fas fa-plus" /> Add new column
-      </AddLink>
-      <ButtonsWrapper ref={buttonsRef}>
-        <Input
-          value={inputValue}
-          ref={inputRef}
-          placeholder={"Enter title of new list..."}
-          onChange={({ target: { value } }) => setInputValue(value)}
-        />
-        <Buttons>
-          <AddButton onClick={addColumn}>Add List</AddButton>
-          <CloseButton>
-            <i className="fas fa-times" />
-          </CloseButton>
-        </Buttons>
-      </ButtonsWrapper>
-    </Wrapper>
+    <NewColumnButton
+      wrapperRef={wrapperRef}
+      addColumnOnEnterPress={addColumnOnEnterPress}
+      openButtonsWrapper={openButtonsWrapper}
+      closeButtonsWrapper={closeButtonsWrapper}
+      addLinkRef={addLinkRef}
+      buttonsRef={buttonsRef}
+      inputValue={inputValue}
+      changeInputValue={changeInputValue}
+      inputRef={inputRef}
+      addColumn={addColumn}
+    />
   );
 };

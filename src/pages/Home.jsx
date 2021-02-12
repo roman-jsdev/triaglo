@@ -1,5 +1,6 @@
-import { DashBoard } from "@components/Dashboard/DashBoard";
+import { DashBoardController } from "@containers/DashBoardController";
 import { WelcomePage } from "@components/WelcomePage/WelcomePage";
+
 import { useAuthState } from "@store/AuthContext/AuthContext";
 
 export const Home = () => {
@@ -12,5 +13,5 @@ export const Home = () => {
   if (!isLoggedIn && navBar) navBar.style.backgroundColor = "inherit";
   if (isLoggedIn) navBar.style.backgroundColor = "var(--main-light-background)";
 
-  return isLoggedIn ? <DashBoard /> : <WelcomePage />;
+  return isLoggedIn ? <DashBoardController /> : <WelcomePage />;
 };

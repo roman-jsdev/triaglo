@@ -1,4 +1,4 @@
-import { AddButton } from "@components/AddNewTaskBtn/Styled";
+import { AddButton } from "@components/NewTaskButton/Styled";
 import styled from "styled-components";
 
 export const Wrapper = styled.div`

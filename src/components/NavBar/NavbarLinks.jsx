@@ -1,4 +1,5 @@
 import { NavLinkSingle } from "./Styled";
+
 import { NavLink } from "react-router-dom";
 
 export const NavbarLinks = ({ links, isLoggedIn, onClick }) => (

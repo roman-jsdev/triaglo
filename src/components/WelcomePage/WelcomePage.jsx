@@ -1,4 +1,5 @@
 import { Description, StartButton, Title, Wrapper } from "./Styled";
+
 import { Link } from "react-router-dom";
 
 export const WelcomePage = () => (

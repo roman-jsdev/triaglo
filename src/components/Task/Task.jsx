@@ -1,6 +1,8 @@
-import { RemoveTaskBtn } from "@components/RemoveTaskBtn/RemoveTaskBtn";
-import { TaskTitle } from "@components/TaskTitle/TaskTitle";
+import { TaskTitleController } from "@containers/TaskTitleController";
+import { RemoveTaskButtonController } from "@containers/RemoveTaskButtonController";
+
 import { Container } from "./Styled";
+
 import { Draggable } from "react-beautiful-dnd";
 
 export const Task = ({ task, index }) => (
@@ -12,8 +14,8 @@ export const Task = ({ task, index }) => (
         {...dragHandleProps}
         isDragging={isDragging}
       >
-        <TaskTitle task={task} isDragging={isDragging} />
-        <RemoveTaskBtn />
+        <TaskTitleController task={task} isDragging={isDragging} />
+        <RemoveTaskButtonController />
       </Container>
     )}
   </Draggable>

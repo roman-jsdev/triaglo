@@ -1,6 +1,9 @@
 import { useState } from "react";
+
 import { AuthForm } from "@components/AuthForm/AuthForm";
+
 import { useAuth } from "@hooks/useAuth";
+
 import { AuthPageWrapper } from "./Styled";
 
 export const Auth = () => {
@@ -16,6 +19,15 @@ export const Auth = () => {
     auth();
   };
 
+  const switchLink = () => {
+    setIsLogin(!isLogin);
+    setEmail("");
+    setPassword("");
+  };
+
+  const changeEmail = ({ target: { value } }) => setEmail(value);
+  const changePassword = ({ target: { value } }) => setPassword(value);
+
   return (
     <AuthPageWrapper>
       <AuthForm
@@ -24,10 +36,11 @@ export const Auth = () => {
         isLogin={isLogin}
         setIsLogin={setIsLogin}
         email={email}
-        setEmail={setEmail}
         password={password}
-        setPassword={setPassword}
         isLoading={isLoading}
+        switchLink={switchLink}
+        changeEmail={changeEmail}
+        changePassword={changePassword}
       />
     </AuthPageWrapper>
   );

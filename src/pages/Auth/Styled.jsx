@@ -1,4 +1,5 @@
 import { Wrapper } from "@components/WelcomePage/Styled";
+
 import styled from "styled-components";
 
 export const AuthPageWrapper = styled(Wrapper)`

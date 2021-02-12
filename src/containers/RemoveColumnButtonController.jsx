@@ -1,7 +1,8 @@
-import { useBoardState } from "@store/BoardContext/BoardContext";
-import { Button } from "./Styled";
+import { RemoveColumnButton } from "@components/RemoveColumnButton/RemoveColumnButton";
 
-export const RemoveColumnBtn = () => {
+import { useBoardState } from "@store/BoardContext/BoardContext";
+
+export const RemoveColumnButtonController = () => {
   const { removeColumn: removeColumnFromState } = useBoardState();
 
   const removeColumn = ({ target }) => {
@@ -11,9 +12,5 @@ export const RemoveColumnBtn = () => {
     removeColumnFromState(columnId);
   };
 
-  return (
-    <Button onClick={removeColumn}>
-      <i className="far fa-trash-alt" />
-    </Button>
-  );
+  return <RemoveColumnButton removeColumn={removeColumn} />;
 };

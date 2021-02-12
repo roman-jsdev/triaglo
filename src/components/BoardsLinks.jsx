@@ -1,6 +1,7 @@
-import { useGetBoardsLinks } from "@hooks/useGetBoardLinks";
-import { BoardLink } from "@components/BoardLink/BoardLink";
 import { Wrapper } from "@components/BoardLink/Styled";
+import { BoardLinkController } from "@containers/BoardLinkController";
+
+import { useGetBoardsLinks } from "@hooks/useGetBoardLinks";
 
 export const BoardsLinks = ({
   isDBLoading,
@@ -13,7 +14,7 @@ export const BoardsLinks = ({
     <>
       {getLinks().length ? (
         getLinks().map(({ to, type, title, board }, index) => (
-          <BoardLink
+          <BoardLinkController
             key={index}
             to={to}
             title={title}

@@ -41,8 +41,8 @@ export const DashBoard = ({
           ))}
         </SideBar>
         <BoardsSections>
-          {getBoardsSections(activeTab).map(({ icon, title, type }, index) => (
-            <Fragment key={index}>
+          {getBoardsSections(activeTab).map(({ icon, title, type }) => (
+            <Fragment key={title}>
               <Subtitle>
                 <i className={icon} />
                 {title}

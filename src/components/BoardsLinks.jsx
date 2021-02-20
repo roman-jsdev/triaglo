@@ -13,9 +13,9 @@ export const BoardsLinks = ({
   return (
     <>
       {getLinks().length ? (
-        getLinks().map(({ to, type, title, board }, index) => (
+        getLinks().map(({ to, type, title, board }) => (
           <BoardLinkController
-            key={index}
+            key={to}
             to={to}
             title={title}
             boardId={board}

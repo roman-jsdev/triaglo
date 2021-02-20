@@ -4,8 +4,8 @@ import { NavLink } from "react-router-dom";
 
 export const NavbarLinks = ({ links, isLoggedIn, onClick }) => (
   <>
-    {links.map(({ to, exact, title }, index) => (
-      <NavLinkSingle key={index} isLoggedIn={isLoggedIn}>
+    {links.map(({ to, exact, title }) => (
+      <NavLinkSingle key={to} isLoggedIn={isLoggedIn}>
         <NavLink
           to={to}
           exact={exact}

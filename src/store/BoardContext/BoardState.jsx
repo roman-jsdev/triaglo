@@ -44,12 +44,10 @@ export const BoardState = ({ children }) => {
   });
   const [putToBoardDB] = useDB("put", `boards/${boardId}`, boardState);
 
-  useEffect(() => {
-    if (response) putToBoardDB();
-  }, [putToBoardDB]);
+  useEffect(() => response && putToBoardDB(), [putToBoardDB]);
 
   const fetchInitialState = useCallback(() => {
-    if (!response) getDB();
+    !response && getDB();
     if (!isLoading) {
       if (
         response.invited &&
